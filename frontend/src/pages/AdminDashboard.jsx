@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import axios from 'axios';
 import MapComponent from '../components/MapComponent';
+import { API_URL } from '../api';
 
 const AdminDashboard = () => {
   const [drivers, setDrivers] = useState([]);
@@ -16,10 +17,10 @@ const AdminDashboard = () => {
       try {
         const token = localStorage.getItem('token');
         const [driverRes, pickupRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/drivers', {
+          axios.get(`${API_URL}/drivers`, {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          axios.get('http://localhost:5000/api/pickups', {
+          axios.get(`${API_URL}/pickups`, {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/pickups/assign',
+        `${API_URL}/pickups/assign`,
         { pickupId, driverId },
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -54,7 +55,7 @@ const AdminDashboard = () => {
 
   const optimizeRoute = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/pickups/optimize-route', {
+      const res = await axios.post(`${API_URL}/pickups/optimize-route`, {
         origin,
         destination
       });
