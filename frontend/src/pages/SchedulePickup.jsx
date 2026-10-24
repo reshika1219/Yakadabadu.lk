@@ -3,8 +3,9 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import scheduleImage from '../images/schedule.jpg';
+import { API_URL } from '../api';
 
-const API = 'http://localhost:5000/api/pickups/add';
+const ENDPOINT = `${API_URL}/pickups/add`;
 
 const emptyPickup = {
   itemType: '',
@@ -36,7 +37,7 @@ function SchedulePickup() {
     try {
       const { pickupDate, ...rest } = pickup;
       await axios.post(
-        API,
+        ENDPOINT,
         { ...rest, pickupType: pickup.itemType, scheduledTime: pickupDate },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
