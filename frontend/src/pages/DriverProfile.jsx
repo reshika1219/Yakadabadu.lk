@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { API_URL } from '../api';
 
 const DriverProfile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -19,7 +20,7 @@ const DriverProfile = () => {
       }
   
       try {
-        const response = await fetch('http://localhost:5000/api/drivers/me', {
+        const response = await fetch(`${API_URL}/drivers/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ const DriverProfile = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/drivers/upload-profile-picture', {
+      const response = await fetch(`${API_URL}/drivers/upload-profile-picture`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

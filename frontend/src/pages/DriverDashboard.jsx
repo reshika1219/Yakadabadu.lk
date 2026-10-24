@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PickupConfirmationModal from '../components/PickupConfirmationModal';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../api';
 
 const DriverDashboard = () => {
   const [location] = useState({ lat: 6.9271, lng: 79.8612 });
@@ -25,7 +26,7 @@ const DriverDashboard = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/pickups/me', {
+        const response = await fetch(`${API_URL}/pickups/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -55,7 +56,7 @@ const DriverDashboard = () => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch(
-        `http://localhost:5000/api/pickups/${currentPickup._id}/confirm`,
+        `${API_URL}/pickups/${currentPickup._id}/confirm`,
         {
           method: 'PUT',
           headers: {
@@ -89,7 +90,7 @@ const DriverDashboard = () => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch(
-        `http://localhost:5000/api/pickups/${currentPickup._id}/cancel`,
+        `${API_URL}/pickups/${currentPickup._id}/cancel`,
         {
           method: 'PUT',
           headers: {
