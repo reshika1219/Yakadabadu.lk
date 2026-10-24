@@ -6,9 +6,17 @@ Waste pickup management: customers schedule metal/plastic/wood pickups, drivers 
 - **Backend:** Node.js, Express, MongoDB (Mongoose), JWT auth, Google Maps Directions
 - **Frontend:** React 19, Vite, Bootstrap
 
-## Setup
+## Quick start (from the repo root)
 ```bash
-# backend (http://localhost:5000)
+cp backend/.env.example backend/.env     # fill in values
+cp frontend/.env.example frontend/.env
+npm install      # installs root, backend and frontend
+npm run dev      # starts API (5001) and web app (5173) together
+```
+
+## Manual setup
+```bash
+# backend (http://localhost:5001)
 cd backend
 cp .env.example .env   # fill in MONGODB_URI, JWT_SECRET, GOOGLE_MAPS_API_KEY
 npm install
