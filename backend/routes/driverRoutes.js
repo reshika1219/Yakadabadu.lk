@@ -6,9 +6,11 @@ import {
   getDriverById,
   updateDriver,
   deleteDriver,
-  updateDriverLocation, // Ensure this is imported
+  updateDriverLocation,
+  uploadProfilePicture,
+  getCurrentDriver // Add this import
 } from '../controllers/driverController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, driverOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -16,13 +18,17 @@ const router = express.Router();
 router.post('/register', registerDriver);
 router.post('/login', loginDriver);
 
-// Protected routes (require JWT authentication)
-router.get('/', protect, getDrivers);
-router.get('/:id', protect, getDriverById);
-router.put('/:id', protect, updateDriver);
-router.delete('/:id', protect, deleteDriver);
+router.get('/me', protect, driverOnly, getCurrentDriver); // New route to get current driver's details
+router.get('/', protect, driverOnly, getDrivers);
+router.get('/:id', protect, driverOnly, getDriverById);
+
+router.put('/:id', protect, driverOnly, updateDriver);
+router.delete('/:id', protect, driverOnly, deleteDriver);
 
 // Add the update-location route
-router.post('/update-location', protect, updateDriverLocation);
+router.post('/update-location', protect, driverOnly, updateDriverLocation);
+
+// Add the upload-profile-picture route
+router.post('/upload-profile-picture', protect, driverOnly, uploadProfilePicture);
 
 export default router;
