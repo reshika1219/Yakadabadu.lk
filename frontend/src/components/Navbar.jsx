@@ -1,42 +1,41 @@
+// frontend/src/components/Navbar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const driverName = localStorage.getItem('driverName');
+
+  const handleLogout = () => {
+    ['token', 'driverName', 'role'].forEach((k) => localStorage.removeItem(k));
+    navigate('/');
+  };
+
   return (
-    <nav style={{ backgroundColor: '#144A20' }} className="navbar navbar-expand-md navbar-light">
+    <nav style={{ backgroundColor: '#144A20' }} className="navbar navbar-expand-md navbar-dark">
       <div className="container">
-        {/* Brand/Logo on the left */}
-         <img src={logo} alt="Logo" style={{ width: '80px', height: '40px', marginRight: '20px' }} />
+        <Link to="/">
+          <img src={logo} alt="Logo" style={{ width: '80px', height: '40px', marginRight: '20px' }} />
+        </Link>
 
-        {/* Toggle button for mobile */}
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        {/* Navbar links */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto"> {/* ms-auto pushes links to the right */}
+        <ul className="navbar-nav ms-auto flex-row align-items-center">
+          {driverName && (
             <li className="nav-item me-3">
-              <Link className="nav-link text-white" to="/">Home</Link>
+              <span className="nav-link text-white">Welcome, {driverName}</span>
             </li>
-            <li className="nav-item me-3">
-              <Link className="nav-link text-white" to="/reduce">Reduce</Link>
-            </li>
-            <li className="nav-item me-3">
-              <Link className="nav-link text-white" to="/reuse">Reuse</Link>
-            </li>
-            <li className="nav-item me-3">
-              <Link className="nav-link text-white" to="/recycle">Recycle</Link>
-            </li>
-            <li className="nav-item me-3">
-              <Link className="nav-link text-white" to="/signin">Sign In</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white" to="/signup">Sign Up</Link>
-            </li>
-          </ul>
-        </div>
+          )}
+          <li className="nav-item">
+            {token ? (
+              <button className="btn btn-link text-white" onClick={handleLogout}>
+                Logout
+              </button>
+            ) : (
+              <Link className="btn btn-link text-white" to="/login">Login</Link>
+            )}
+          </li>
+        </ul>
       </div>
     </nav>
   );
