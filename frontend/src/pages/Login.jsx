@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import { API_URL } from '../api';
 
-const API = 'http://localhost:5000/api';
 
 const emptyForm = { name: '', email: '', password: '', address: '', phone: '' };
 
@@ -23,14 +23,14 @@ const Login = () => {
     try {
       let data;
       if (role === 'driver') {
-        ({ data } = await axios.post(`${API}/drivers/login`, {
+        ({ data } = await axios.post(`${API_URL}/drivers/login`, {
           email: formData.email,
           password: formData.password,
         }));
         localStorage.setItem('driverName', data.driver.name);
       } else {
         ({ data } = await axios.post(
-          `${API}/users/${register ? 'register' : 'login'}`,
+          `${API_URL}/users/${register ? 'register' : 'login'}`,
           register ? formData : { email: formData.email, password: formData.password }
         ));
         localStorage.setItem('driverName', data.name);
