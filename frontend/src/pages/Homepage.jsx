@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -11,6 +12,7 @@ import reuseImage from "../images/reuse.png";
 import recycleImage from "../images/recycle.jpg";
 
 const Homepage = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("reduce");
 
   return (
@@ -60,7 +62,7 @@ const Homepage = () => {
               <img src={recycleIcon} alt="Recycle" />
             </div>
           </div>
-          <div class="services-text">
+          <div className="services-text">
             <h3>Our Services</h3>
             <p>We offer a range of services to help you manage waste sustainably, from pickup scheduling to waste recycling partnerships.</p>
           </div>
@@ -74,7 +76,7 @@ const Homepage = () => {
               <div className="rrr-text">
                 <h3>Reduce</h3>
                 <p>We make it easy to responsibly dispose of your waste with our pickup scheduling and drop-off services for metal and plastic waste. By reducing unnecessary waste buildup, we help keep the environment clean while ensuring materials are directed to the right channels for further use. Choose to give away your waste and be part of the sustainability movement!</p>
-                <button className="learn-more-btn">Schedule Pickup</button>
+                <button className="learn-more-btn" onClick={() => navigate("/schedule-pickup")}>Schedule Pickup</button>
               </div>
             </div>
           )}
