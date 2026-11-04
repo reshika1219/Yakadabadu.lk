@@ -28,12 +28,14 @@ npm install     # installs root, backend and frontend
 npm run dev     # API on :5001, web app on :5173
 ```
 
-Open <http://localhost:5173> and log in with the demo accounts (created on the first run):
+Open <http://localhost:5173>. On the login page, the **Quick login** buttons (Driver, Customer, Admin) sign you in with one click. The demo accounts are created on the first run:
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Driver | `driver@demo.lk` | `Demo@1234` |
 | Customer | `customer@demo.lk` | `Demo@1234` |
+
+The quick-login buttons are an MVP convenience. Hide them with `VITE_DEMO_LOGIN=false` in `frontend/.env`.
 
 ### Database
 By default (`MONGODB_URI=memory`) the API starts an embedded MongoDB and keeps its data in `backend/.data`. Delete that folder to reset to fresh demo data. To use your own MongoDB or Atlas, put the full connection string in `MONGODB_URI`.
@@ -46,6 +48,7 @@ By default (`MONGODB_URI=memory`) the API starts an embedded MongoDB and keeps i
 | | `GOOGLE_MAPS_API_KEY` | Route optimisation |
 | | `PORT` | API port (default `5001`) |
 | `frontend/.env` | `VITE_GOOGLE_MAPS_API_KEY` | Map display |
+| | `VITE_DEMO_LOGIN` | Set to `false` to hide the quick-login buttons |
 | | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 
 Port 5001 is used because macOS AirPlay occupies 5000.
