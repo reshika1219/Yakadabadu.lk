@@ -48,8 +48,7 @@ const tabs = [
 const Homepage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('reduce');
-  const active = tabs.find((t) => t.id === activeTab);
-  const { isAuthed, role } = useAuth();
+    const { isAuthed, role } = useAuth();
   const { data: rateData } = useFetch('/rates');
   const { data: listings } = useFetch('/listings?sort=newest');
   const startPath = !isAuthed ? '/login?mode=register' : role === 'user' ? '/app/schedule' : HOME[role];
@@ -133,7 +132,7 @@ const Homepage = () => {
         <div className="material-grid">
           {Object.entries(MATERIALS).map(([key, m]) => (
             <Link to="/prices" className="material-tile" key={key}>
-              <MatIcon material={key} size={46} />
+              <MatIcon material={key} size={58} />
               <strong>{m.label}</strong>
               <span>{rateOf(key) ? `${money(rateOf(key).pricePerKg)} / kg` : '—'}</span>
             </Link>
@@ -172,7 +171,7 @@ const Homepage = () => {
                 role="tab"
                 id={`tab-${t.id}`}
                 aria-selected={activeTab === t.id}
-                aria-controls="rrr-panel"
+                aria-controls={`panel-${t.id}`}
                 className={`rrr-card ${activeTab === t.id ? 'is-active' : ''}`}
                 onClick={() => setActiveTab(t.id)}
               >
@@ -183,18 +182,29 @@ const Homepage = () => {
           })}
         </div>
 
-        <div id="rrr-panel" role="tabpanel" aria-labelledby={`tab-${active.id}`} className="rrr-panel">
-          <img src={active.image} alt={`${active.label} illustration`} />
-          <div>
-            <h3>{active.label}</h3>
-            <p>{active.text}</p>
-            <ul className="checks list-unstyled">
-              {active.points.map((pt) => <li key={pt}><span><LuCheck aria-hidden="true" /></span>{pt}</li>)}
-            </ul>
-            <button type="button" className="btn btn-success" onClick={() => navigate(active.cta[1] === 'start' ? startPath : active.cta[1])}>
-              {active.cta[0]} <LuArrowRight aria-hidden="true" />
-            </button>
-          </div>
+        <div className="rrr-stack">
+          {tabs.map((t) => (
+            <div
+              key={t.id}
+              id={`panel-${t.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${t.id}`}
+              aria-hidden={activeTab !== t.id}
+              className={`rrr-panel ${activeTab === t.id ? 'is-active' : ''}`}
+            >
+              <div className="rrr-panel__media"><img src={t.image} alt={`${t.label} illustration`} /></div>
+              <div>
+                <h3>{t.label}</h3>
+                <p>{t.text}</p>
+                <ul className="checks list-unstyled">
+                  {t.points.map((pt) => <li key={pt}><span><LuCheck aria-hidden="true" /></span>{pt}</li>)}
+                </ul>
+                <button type="button" className="btn btn-success" tabIndex={activeTab === t.id ? 0 : -1} onClick={() => navigate(t.cta[1] === 'start' ? startPath : t.cta[1])}>
+                  {t.cta[0]} <LuArrowRight aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
