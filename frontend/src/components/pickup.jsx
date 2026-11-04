@@ -35,7 +35,7 @@ export const PickupRow = ({ pickup: p, to, meta, side }) => {
 };
 
 const CAT_ICON = { furniture: LuSofa, electronics: LuTv, appliances: LuLamp, 'metal-parts': LuCog, building: LuBuilding2, tools: LuWrench, other: LuBike };
-const CAT_COLOR = { furniture: '#a0673a', electronics: '#3b6fb5', appliances: '#14808a', 'metal-parts': '#2f7d4a', building: '#7a5ea8', tools: '#c27a1a', other: '#5f6b62' };
+const CAT_COLOR = { furniture: '#8f5a31', electronics: '#2f5f9f', appliances: '#0f737c', 'metal-parts': '#2a6e41', building: '#6a4f95', tools: '#9a5a10', other: '#4f5b53' };
 
 // Photo when the seller uploaded one, otherwise a colour tile with a category icon
 export const ListingArt = ({ listing, className = 'listing__img', children }) => {

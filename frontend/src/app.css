@@ -106,11 +106,12 @@ kbd { font-family: inherit; font-size: 0.72rem; background: var(--paper-2); bord
 .menu__foot { display: flex; justify-content: center; align-items: center; gap: 0.3rem; padding: 0.75rem; border-top: 1px solid var(--line); font-weight: 700; color: var(--forest); text-decoration: none; background: var(--paper); }
 .link-btn { display: inline-flex; align-items: center; gap: 0.3rem; background: none; border: 0; color: var(--leaf); font-weight: 700; font-size: 0.82rem; padding: 0; }
 .notif-list { margin: 0; max-height: 360px; overflow-y: auto; }
-.notif { display: grid; gap: 0.1rem; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 0.75rem 0.9rem 0.75rem 1.3rem; position: relative; }
+.notif { display: grid; gap: 0.1rem; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 0.75rem 0.9rem 0.75rem 1.1rem; position: relative; }
 .notif:hover { background: var(--paper); }
 .notif span { color: var(--muted); font-size: 0.86rem; }
 .notif small { color: var(--muted); font-size: 0.74rem; }
-.notif.is-unread::before { content: ""; position: absolute; left: 0.55rem; top: 1.1rem; width: 8px; height: 8px; border-radius: 50%; background: var(--leaf); }
+.notif.is-unread { background: #f3f8e6; box-shadow: inset 3px 0 0 var(--forest); }
+.notif.is-unread:hover { background: #ebf3d6; }
 
 .content { flex: 1; padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2rem) 3rem; width: 100%; max-width: 1280px; margin: 0 auto; }
 .app-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; padding: 1.1rem clamp(1rem, 3vw, 2rem); border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; }
@@ -262,7 +263,8 @@ a.row-item:hover { background: var(--paper); color: inherit; }
 .listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.1rem; }
 .listing { display: flex; flex-direction: column; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); overflow: hidden; color: inherit; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
 .listing:hover { transform: translateY(-3px); box-shadow: var(--shadow); color: inherit; }
-.listing__img { aspect-ratio: 4 / 3; display: grid; place-items: center; font-size: 2.6rem; color: rgba(255, 255, 255, 0.92); position: relative; }
+.listing__img { aspect-ratio: 4 / 3; display: grid; place-items: center; font-size: 2.8rem; color: #fff; position: relative; }
+.listing__img svg { filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)); }
 .listing__img img { width: 100%; height: 100%; object-fit: cover; }
 .listing__tag { position: absolute; left: 0.6rem; top: 0.6rem; background: rgba(255, 255, 255, 0.92); color: var(--ink); border-radius: 999px; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.6rem; }
 .listing__body { padding: 0.9rem 1rem 1.1rem; display: grid; gap: 0.25rem; }

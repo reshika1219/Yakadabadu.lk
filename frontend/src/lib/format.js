@@ -29,10 +29,10 @@ export const isoDate = (d = new Date()) => new Date(d).toISOString().slice(0, 10
 
 export const MATERIALS = {
   metal: { label: 'Metal', color: '#2f7d4a', icon: 'cog' },
-  plastic: { label: 'Plastic', color: '#3b82c4', icon: 'recycle' },
-  paper: { label: 'Paper & cardboard', color: '#c9a227', icon: 'inbox' },
-  glass: { label: 'Glass', color: '#14a3a3', icon: 'sparkles' },
-  ewaste: { label: 'E-waste', color: '#8b5cf6', icon: 'tv' },
+  plastic: { label: 'Plastic', color: '#2f6fb0', icon: 'recycle' },
+  paper: { label: 'Paper & cardboard', color: '#98720f', icon: 'inbox' },
+  glass: { label: 'Glass', color: '#0d8585', icon: 'sparkles' },
+  ewaste: { label: 'E-waste', color: '#6d3fd1', icon: 'tv' },
   wood: { label: 'Wood', color: '#a0673a', icon: 'hammer' },
 };
 
