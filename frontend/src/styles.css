@@ -175,3 +175,5 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.2; }
 .pill--warn { background: #fff3d6; color: #8a5a00; }
 .pill--bad { background: #fde4e1; color: #a12a1f; }
 .pill--muted { background: var(--surface-alt); color: var(--ink-muted); }
+
+.map-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
