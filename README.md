@@ -1,36 +1,80 @@
 # Yakadabadu.lk
 
-Waste pickup management: customers schedule metal/plastic/wood pickups, drivers see and complete their assigned pickups, and an admin view assigns drivers and plans routes.
+Scrap pickup, made simple. Customers book metal, plastic or wood pickups, drivers work through their assigned stops, and admins assign drivers and plan routes.
 
-## Stack
-- **Backend:** Node.js, Express, MongoDB (Mongoose), JWT auth, Google Maps Directions
-- **Frontend:** React 19, Vite, Bootstrap
+## Features
+- **Customers:** register, log in and schedule a pickup (item type, size, date, what they want in return).
+- **Drivers:** see assigned pickups on a map, complete or cancel them with weight and amount, download the list as a PDF, manage their profile.
+- **Admins:** assign drivers to pickups and optimise routes with Google Maps.
 
-## Quick start (from the repo root)
+## Tech stack
+| Layer | Tools |
+| --- | --- |
+| Frontend | React 19, Vite, Bootstrap 5, React Router |
+| Backend | Node.js, Express, MongoDB (Mongoose), JWT, Joi |
+| Services | Google Maps (Directions and map display) |
+
+## Getting started
+**Prerequisites:** Node.js 18+, a running MongoDB, and a Google Maps API key.
+
 ```bash
-cp backend/.env.example backend/.env     # fill in values
+git clone https://github.com/reshika1219/Yakadabadu.lk.git
+cd Yakadabadu.lk
+
+cp backend/.env.example backend/.env      # then fill in the values below
 cp frontend/.env.example frontend/.env
-npm install      # installs root, backend and frontend
-npm run dev      # starts API (5001) and web app (5173) together
+
+npm install     # installs root, backend and frontend
+npm run dev     # API on :5001, web app on :5173
 ```
 
-## Manual setup
-```bash
-# backend (http://localhost:5001)
-cd backend
-cp .env.example .env   # fill in MONGODB_URI, JWT_SECRET, GOOGLE_MAPS_API_KEY
-npm install
-npm run dev
+Open <http://localhost:5173>.
 
-# frontend (http://localhost:5173)
-cd frontend
-cp .env.example .env   # VITE_GOOGLE_MAPS_API_KEY
-npm install
-npm run dev
-```
+### Environment variables
+| File | Variable | Purpose |
+| --- | --- | --- |
+| `backend/.env` | `MONGODB_URI` | MongoDB connection string |
+| | `JWT_SECRET` | Secret used to sign login tokens (use a long random value) |
+| | `GOOGLE_MAPS_API_KEY` | Route optimisation |
+| | `PORT` | API port (default `5001`) |
+| `frontend/.env` | `VITE_GOOGLE_MAPS_API_KEY` | Map display |
+| | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 
-## Roles
-- **Customer** – register/login on `/login` (Customer tab), then schedule pickups at `/schedule-pickup`.
-- **Driver** – login on `/login`; `/home`, `/driver-dashboard`, `/driver-profile`, `/admin-dashboard`.
+Port 5001 is used because macOS AirPlay occupies 5000.
+
+## Scripts
+| Command | Where | What it does |
+| --- | --- | --- |
+| `npm run dev` | root | Runs API and web app together |
+| `npm run build` | root | Production build of the frontend |
+| `npm start` | root | Starts the API without auto-reload |
+| `npm run lint` | `frontend/` | Lints the frontend |
+
+## Pages and roles
+| Route | Who | Page |
+| --- | --- | --- |
+| `/` | Everyone | Landing page |
+| `/login` | Everyone | Driver and customer login, customer sign-up |
+| `/schedule-pickup` | Customer | Book a pickup |
+| `/home`, `/driver-dashboard`, `/driver-profile` | Driver | Driver area |
+| `/admin-dashboard` | Driver | Assign pickups, optimise routes |
 
 Driver and admin API endpoints reject customer tokens.
+
+## API overview
+All routes are under `/api`. Protected routes need `Authorization: Bearer <token>`.
+
+| Resource | Endpoints |
+| --- | --- |
+| `users` | `POST /register`, `POST /login` |
+| `drivers` | `POST /register`, `POST /login`, `GET /me`, `GET /`, `PUT /:id`, `POST /upload-profile-picture` |
+| `pickups` | `POST /add`, `GET /me`, `GET /`, `POST /assign`, `PUT /:id/confirm`, `PUT /:id/cancel`, `POST /optimize-route` |
+
+## Project structure
+```
+backend/    Express API: routes, controllers, models, middleware
+frontend/   React app: pages, components, shared styles (src/styles.css)
+```
+
+## Security
+Please see [SECURITY.md](SECURITY.md) to report a vulnerability.
