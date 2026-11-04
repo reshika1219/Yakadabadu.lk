@@ -8,7 +8,7 @@ const MAT_ICON = { metal: LuCog, plastic: LuRecycle, paper: LuInbox, glass: LuSp
 
 export const MatIcon = ({ material, size }) => {
   const Icon = MAT_ICON[material] || LuRecycle;
-  return <span className="mat-dot" style={{ background: MATERIALS[material]?.color || 'var(--forest)', ...(size && { width: size, height: size }) }}><Icon aria-hidden="true" /></span>;
+  return <span className="mat-dot" style={{ background: MATERIALS[material]?.color || 'var(--forest)', ...(size && { width: size, height: size, fontSize: Math.round(size * 0.5), borderRadius: Math.round(size * 0.3) }) }}><Icon aria-hidden="true" strokeWidth={2.2} /></span>;
 };
 
 // One pickup as a list row. `to` makes the whole row a link; `meta` adds the customer or driver line.
