@@ -24,11 +24,14 @@ const Footer = () => (
       </nav>
 
       <ul className="site-footer__social list-unstyled">
-        {socials.map(([label, Icon]) => (
-          <li key={label}>
-            <a href="#" aria-label={label}><Icon size={18} aria-hidden="true" /></a>
-          </li>
-        ))}
+        {socials.map(([label, icon]) => {
+          const Icon = icon;
+          return (
+            <li key={label}>
+              <a href="#" aria-label={label}><Icon size={18} aria-hidden="true" /></a>
+            </li>
+          );
+        })}
       </ul>
     </div>
     <p className="site-footer__copy">&copy; {new Date().getFullYear()} Yakadabadu.lk</p>
