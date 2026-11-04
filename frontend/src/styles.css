@@ -167,3 +167,11 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.2; }
 .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--brand-600); }
 .tile strong { font-size: 1.1rem; color: var(--brand-800); }
 .tile span { color: var(--ink-muted); }
+
+/* ---------- Page states & pills ---------- */
+.page-state { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 3rem 1rem; text-align: center; }
+.pill { display: inline-block; padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; text-transform: capitalize; }
+.pill--ok { background: var(--brand-100); color: var(--brand-800); }
+.pill--warn { background: #fff3d6; color: #8a5a00; }
+.pill--bad { background: #fde4e1; color: #a12a1f; }
+.pill--muted { background: var(--surface-alt); color: var(--ink-muted); }
