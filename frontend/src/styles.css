@@ -223,3 +223,11 @@ details summary { cursor: pointer; }
 }
 @media (max-width: 480px) { .quick__row { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* ---------- Map ---------- */
+.map-wrap { position: relative; }
+.map-wrap .leaflet-container { font-family: inherit; background: var(--paper-2); }
+.map-note { position: absolute; z-index: 500; left: 12px; bottom: 12px; background: var(--surface); border-radius: 999px; padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 700; box-shadow: var(--shadow); }
+.map-pin { display: block; width: 22px; height: 22px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid var(--forest); background: var(--lime); box-shadow: 0 2px 6px rgba(14, 26, 18, 0.35); }
+.map-pin--other { background: #fff; }
+.leaflet-popup-content-wrapper { border-radius: 14px; }
