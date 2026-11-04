@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import heroImage from "../images/hero.jpg";
@@ -11,98 +10,91 @@ import reduceImage from "../images/reduce.jpg";
 import reuseImage from "../images/reuse.png";
 import recycleImage from "../images/recycle.jpg";
 
+const tabs = [
+  {
+    id: 'reduce',
+    label: 'Reduce',
+    icon: reduceIcon,
+    image: reduceImage,
+    text: 'We make it easy to responsibly dispose of your waste with pickup scheduling and drop-off services for metal and plastic. Less buildup means a cleaner environment, and your materials go straight to the right channels.',
+    cta: ['Schedule pickup', '/schedule-pickup'],
+  },
+  {
+    id: 'reuse',
+    label: 'Reuse',
+    icon: reuseIcon,
+    image: reuseImage,
+    text: 'Not everything is waste. We assess, repair and resell usable materials, giving them a second life and cutting demand for new production.',
+  },
+  {
+    id: 'recycle',
+    label: 'Recycle',
+    icon: recycleIcon,
+    image: recycleImage,
+    text: 'We partner with specialised recycling companies so your metal, plastic and other recyclables are turned into new, usable products.',
+  },
+];
+
 const Homepage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("reduce");
+  const [activeTab, setActiveTab] = useState('reduce');
+  const active = tabs.find((t) => t.id === activeTab);
+  const startPath = localStorage.getItem('token') ? '/schedule-pickup' : '/login';
 
   return (
     <div>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="hero">
-        <img src={heroImage} alt="Hero Banner" className="hero-image" />
-        <div className="hero-text">
-          <h1>Welcome to Yakadabadu.lk</h1>
-          <p>Reduce Waste. Reuse Materials. Recycle Responsibly.</p>
-          <button className="get-started-btn">Get Started</button>
+      <header className="hero">
+        <img src={heroImage} alt="" className="hero__image" />
+        <div className="hero__text">
+          <h1>Turn your scrap into something better</h1>
+          <p>Reduce waste. Reuse materials. Recycle responsibly.</p>
+          <button type="button" className="btn-cta" onClick={() => navigate(startPath)}>
+            Get started
+          </button>
         </div>
-      </section>
+      </header>
 
-      {/* Reduce, Reuse, Recycle Section */}
-      <section className="rrr-section">
-        <h2>Leading the Way in Sustainable Scrap Collection and Recycling</h2>
-        <div className="rrr-slider">
-          <div className="rrr-slider-item">
-            <p>Reduce</p>
-            <div
-              className={`rrr-circle ${activeTab === "reduce" ? "active" : ""}`}
-              onClick={() => setActiveTab("reduce")}
-            >
-              <img src={reduceIcon} alt="Reduce" />
-            </div>
-          </div>
+      <main className="container py-5">
+        <section className="text-center mx-auto" style={{ maxWidth: 640 }}>
+          <h2 className="h3">Sustainable scrap collection, from your doorstep</h2>
+          <p className="text-muted">
+            Pick a path below to see how we help you manage waste, from scheduling a pickup to responsible recycling.
+          </p>
+        </section>
 
-          <div className="rrr-slider-item">
-            <p>Reuse</p>
-            <div
-              className={`rrr-circle ${activeTab === "reuse" ? "active" : ""}`}
-              onClick={() => setActiveTab("reuse")}
+        <div className="rrr-tabs" role="tablist" aria-label="Reduce, reuse, recycle">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-selected={activeTab === t.id}
+              aria-controls="rrr-panel"
+              className={`rrr-tab ${activeTab === t.id ? 'is-active' : ''}`}
+              onClick={() => setActiveTab(t.id)}
             >
-              <img src={reuseIcon} alt="Reuse" />
-            </div>
-          </div>
-
-          <div className="rrr-slider-item">
-            <p>Recycle</p>
-            <div
-              className={`rrr-circle ${activeTab === "recycle" ? "active" : ""}`}
-              onClick={() => setActiveTab("recycle")}
-            >
-              <img src={recycleIcon} alt="Recycle" />
-            </div>
-          </div>
-          <div className="services-text">
-            <h3>Our Services</h3>
-            <p>We offer a range of services to help you manage waste sustainably, from pickup scheduling to waste recycling partnerships.</p>
-          </div>
+              <img src={t.icon} alt="" />
+              {t.label}
+            </button>
+          ))}
         </div>
 
-        {/* Description Section */}
-        <div className="rrr-content">
-          {activeTab === "reduce" && (
-            <div className="rrr-info morph">
-              <img src={reduceImage} alt="Reduce" className="rrr-image" />
-              <div className="rrr-text">
-                <h3>Reduce</h3>
-                <p>We make it easy to responsibly dispose of your waste with our pickup scheduling and drop-off services for metal and plastic waste. By reducing unnecessary waste buildup, we help keep the environment clean while ensuring materials are directed to the right channels for further use. Choose to give away your waste and be part of the sustainability movement!</p>
-                <button className="learn-more-btn" onClick={() => navigate("/schedule-pickup")}>Schedule Pickup</button>
-              </div>
-            </div>
-          )}
-          {activeTab === "reuse" && (
-            <div className="rrr-info morph">
-              <img src={reuseImage} alt="Reuse" className="rrr-image" />
-              <div className="rrr-text">
-                <h3>Reuse</h3>
-                <p>Not everything is waste! We focus on reselling usable materials and repurposing valuable parts that can be modified and given a second life. Instead of letting materials go to waste, we ensure they are carefully assessed, repaired, and resold, reducing the demand for new production and minimizing environmental impact. Browse through our collection of reusable items and discover quality materials at affordable prices.
-                </p>
-                <button className="learn-more-btn">Explore</button>
-              </div>
-            </div>
-          )}
-          {activeTab === "recycle" && (
-            <div className="rrr-info morph">
-              <img src={recycleImage} alt="Recycle" className="rrr-image" />
-              <div className="rrr-text">
-                <h3>Recycle</h3>
-                <p>While we don’t recycle directly, we partner with specialized recycling companies to ensure that your waste is processed responsibly. Metal, plastic, and other recyclable materials are collected and sent to trusted facilities that transform them into new, usable products. By bridging the gap between waste collection and recycling, we contribute to a cleaner and greener future!</p>
-                <button className="learn-more-btn">Learn More</button>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+        <section id="rrr-panel" role="tabpanel" aria-labelledby={`tab-${active.id}`} className="rrr-panel">
+          <img src={active.image} alt={`${active.label} illustration`} />
+          <div>
+            <h3>{active.label}</h3>
+            <p>{active.text}</p>
+            {active.cta && (
+              <button type="button" className="btn btn-success px-4" onClick={() => navigate(active.cta[1])}>
+                {active.cta[0]}
+              </button>
+            )}
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>
@@ -110,4 +102,3 @@ const Homepage = () => {
 };
 
 export default Homepage;
-
