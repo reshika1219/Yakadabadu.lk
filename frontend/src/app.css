@@ -323,3 +323,9 @@ a.row-item:hover { background: var(--paper); color: inherit; }
 .offers { background: var(--paper); border-top: 1px solid var(--line); padding: 0.9rem 1.25rem; display: grid; gap: 0.6rem; }
 .offer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; background: var(--surface); border: 1.5px solid var(--line); border-radius: 14px; padding: 0.7rem 0.9rem; }
 .row-item .listing__img { width: 72px; aspect-ratio: 1; border-radius: 14px; overflow: hidden; font-size: 1.5rem; flex-shrink: 0; }
+
+.attention { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.6rem; }
+.attention__item { display: flex; align-items: center; gap: 0.7rem; background: #fff7df; border: 1.5px solid #f3d98b; border-radius: 14px; padding: 0.75rem 1rem; color: #5b4300; font-weight: 600; text-decoration: none; }
+.attention__item span { flex: 1; }
+.attention__item:hover { border-color: #d9a82a; color: #5b4300; }
+.rows > li { list-style: none; }
