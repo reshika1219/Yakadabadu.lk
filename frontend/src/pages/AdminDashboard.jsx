@@ -109,7 +109,9 @@ const AdminDashboard = () => {
                           >
                             <option value="">Select driver</option>
                             {drivers.map((driver) => (
-                              <option key={driver._id} value={driver._id}>{driver.name}</option>
+                              <option key={driver._id} value={driver._id}>
+                                {driver.name || `${driver.firstName} ${driver.lastName}`}
+                              </option>
                             ))}
                           </select>
                         </td>
