@@ -56,7 +56,7 @@ const Homepage = () => {
           <div>
             <span className="eyebrow">Scrap pickup in Sri Lanka</span>
             <h1>Your scrap, <em>picked up.</em></h1>
-            <p className="hero__sub">Book a collection for metal, plastic or wood. We come to you, weigh it, and pay or swap it on the spot.</p>
+            <p className="hero__sub">Book a collection for metal, plastic, paper, glass, e-waste or wood. We come to you, weigh it, and pay or swap it on the spot.</p>
             <div className="hero__cta">
               <button type="button" className="btn btn-lime btn-lg" onClick={() => navigate(startPath)}>Schedule a pickup</button>
               <button type="button" className="btn btn-ghost btn-lg" onClick={scrollToHow}>How it works</button>

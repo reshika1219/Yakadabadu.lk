@@ -13,7 +13,7 @@ import { ensureRates, MATERIALS, SCALE_KG, COMMISSION, RECYCLER_MARGIN } from '.
 
 export const DEMO_PASSWORD = 'Demo@1234';
 // Bump to rebuild the embedded demo database with fresh sample data
-const SEED_VERSION = 3;
+const SEED_VERSION = 4;
 
 // Small deterministic RNG so every fresh database looks the same
 const rng = (seed) => () => {
