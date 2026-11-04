@@ -156,3 +156,14 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.2; }
   .rrr-panel { grid-template-columns: 1fr; }
   .rrr-panel img { height: 200px; }
 }
+
+/* ---------- Segmented control ---------- */
+.segmented { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-alt); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+.segmented button { border: 0; background: transparent; border-radius: 999px; padding: 0.5rem; font-weight: 600; color: var(--ink-muted); transition: background 0.2s, color 0.2s; }
+.segmented button.is-active { background: var(--brand-600); color: #fff; }
+
+/* ---------- Dashboard tiles ---------- */
+.tile { display: flex; flex-direction: column; gap: 0.35rem; width: 100%; text-align: left; padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+.tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--brand-600); }
+.tile strong { font-size: 1.1rem; color: var(--brand-800); }
+.tile span { color: var(--ink-muted); }
