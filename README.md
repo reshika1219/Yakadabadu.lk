@@ -15,7 +15,7 @@ Scrap pickup, made simple. Customers book metal, plastic or wood pickups, driver
 | Services | Google Maps (Directions and map display) |
 
 ## Getting started
-**Prerequisites:** Node.js 18+, a running MongoDB, and a Google Maps API key.
+**Prerequisites:** Node.js 18+. No database install is needed. A Google Maps API key is optional (only maps and route optimisation use it).
 
 ```bash
 git clone https://github.com/reshika1219/Yakadabadu.lk.git
@@ -28,12 +28,20 @@ npm install     # installs root, backend and frontend
 npm run dev     # API on :5001, web app on :5173
 ```
 
-Open <http://localhost:5173>.
+Open <http://localhost:5173> and log in with the demo accounts (created on the first run):
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Driver | `driver@demo.lk` | `Demo@1234` |
+| Customer | `customer@demo.lk` | `Demo@1234` |
+
+### Database
+By default (`MONGODB_URI=memory`) the API starts an embedded MongoDB and keeps its data in `backend/.data`. Delete that folder to reset to fresh demo data. To use your own MongoDB or Atlas, put the full connection string in `MONGODB_URI`.
 
 ### Environment variables
 | File | Variable | Purpose |
 | --- | --- | --- |
-| `backend/.env` | `MONGODB_URI` | MongoDB connection string |
+| `backend/.env` | `MONGODB_URI` | `memory` (embedded, default) or a MongoDB connection string |
 | | `JWT_SECRET` | Secret used to sign login tokens (use a long random value) |
 | | `GOOGLE_MAPS_API_KEY` | Route optimisation |
 | | `PORT` | API port (default `5001`) |
