@@ -167,7 +167,7 @@ details summary { cursor: pointer; }
 .tile:hover span { color: rgba(255, 255, 255, 0.75); }
 
 .page-state { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 3rem 1rem; text-align: center; background: var(--paper-2); border-radius: var(--radius); }
-.pill { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: capitalize; }
+.pill { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
 .pill--ok { background: #dff3bd; color: var(--forest); }
 .pill--warn { background: #ffe9a8; color: #6b4a00; }
 .pill--bad { background: #fbe0da; color: #8d2a1a; }
