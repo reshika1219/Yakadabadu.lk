@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <header className="site-nav">
-      <nav className="container site-nav__inner" aria-label="Main">
+      <nav className="container" aria-label="Main"><div className="site-nav__inner">
         <Link to="/" aria-label="Yakadabadu.lk home">
           <img src={logo} alt="" className="site-nav__logo" />
         </Link>
@@ -34,6 +34,7 @@ const Navbar = () => {
           ) : (
             <Link className="site-nav__btn" to="/login">Log in</Link>
           )}
+        </div>
         </div>
       </nav>
     </header>
