@@ -329,3 +329,7 @@ a.row-item:hover { background: var(--paper); color: inherit; }
 .attention__item span { flex: 1; }
 .attention__item:hover { border-color: #d9a82a; color: #5b4300; }
 .rows > li { list-style: none; }
+
+.staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
+.min-w-0 { min-width: 0; }
+.pill--info { background: #dbeafe; color: #1e4f8f; }
