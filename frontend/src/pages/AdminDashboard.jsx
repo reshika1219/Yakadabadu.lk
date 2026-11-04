@@ -104,7 +104,7 @@ const AdminDashboard = () => {
                           <select
                             className="form-select form-select-sm"
                             aria-label={`Driver for ${pickup.address}`}
-                            value={pickup.driver || ''}
+                            value={pickup.driver?._id || pickup.driver || ''}
                             onChange={(e) => assignDriver(pickup._id, e.target.value)}
                           >
                             <option value="">Select driver</option>
