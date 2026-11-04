@@ -82,7 +82,7 @@ const DriverDashboard = () => {
       <main className="flex-grow-1 container py-4">
         <div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
           <div>
-            <h1 className="h2 fw-bold text-primary mb-1">Today&rsquo;s pickups</h1>
+            <h1 className="page-title mb-1">Today&rsquo;s pickups</h1>
             <p className="text-muted mb-0">{loading ? 'Loading…' : `${open} waiting, ${pickups.length} total`}</p>
           </div>
           {pickups.length > 0 && (

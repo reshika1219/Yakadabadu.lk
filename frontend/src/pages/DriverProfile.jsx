@@ -112,7 +112,7 @@ const DriverProfile = () => {
                 <input type="file" accept="image/*" onChange={handleFileChange} className="visually-hidden" aria-label="Choose a new profile picture" />
               </label>
               <div>
-                <h1 className="h2 fw-bold mb-1">{driver.firstName} {driver.lastName}</h1>
+                <h1 className="page-title mb-1">{driver.firstName} {driver.lastName}</h1>
                 <p className="text-muted mb-2">{driver.email}</p>
                 {pictureChanged && (
                   <button type="button" className="btn btn-success btn-sm" onClick={savePicture} disabled={saving}>

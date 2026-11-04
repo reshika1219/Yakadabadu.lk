@@ -70,7 +70,7 @@ const AdminDashboard = () => {
     <div className="bg-light min-vh-100 d-flex flex-column">
       <Navbar />
       <main className="container flex-grow-1 py-4">
-        <h1 className="h2 fw-bold text-primary mb-4">Admin dashboard</h1>
+        <h1 className="page-title mb-4">Admin dashboard</h1>
 
         {notice && <div className={`alert alert-${notice.type}`} role={notice.type === 'danger' ? 'alert' : 'status'}>{notice.text}</div>}
 

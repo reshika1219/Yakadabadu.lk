@@ -12,7 +12,7 @@ const Home = () => {
     <div className="bg-light min-vh-100 d-flex flex-column">
       <Navbar />
       <main className="container flex-grow-1 py-5">
-        <h1 className="h2 fw-bold text-primary mb-1">Hello, {driverName || 'Driver'}</h1>
+        <h1 className="page-title mb-1">Hello, {driverName || 'Driver'}</h1>
         <p className="text-muted mb-4">What would you like to do today?</p>
 
         <div className="row g-3">

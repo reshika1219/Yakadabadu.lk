@@ -77,7 +77,7 @@ function SchedulePickup() {
               <img src={scheduleImage} alt="Yakadabadu.lk" className="w-100 h-100" style={{ objectFit: 'cover' }} />
             </div>
             <div className="col-md-7 p-4">
-              <h1 className="h3 fw-bold">Schedule a pickup</h1>
+              <h1 className="page-title">Schedule a pickup</h1>
               <p className="text-muted">Tell us what you have and when, and we will collect it.</p>
 
               {success && <div className="alert alert-success" role="status">Pickup scheduled. We will be in touch to confirm.</div>}
