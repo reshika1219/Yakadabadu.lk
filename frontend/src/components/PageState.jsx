@@ -24,7 +24,7 @@ export const Empty = ({ title, hint }) => (
   </div>
 );
 
-const STATUS_TONE = { assigned: 'warn', confirmed: 'ok', completed: 'ok', cancelled: 'bad', pending: 'muted' };
+const STATUS_TONE = { assigned: 'warn', 'on-the-way': 'info', confirmed: 'ok', completed: 'ok', cancelled: 'bad', pending: 'muted' };
 
 export const StatusPill = ({ status }) => (
   <span className={`pill pill--${STATUS_TONE[status] || 'muted'}`}>{status}</span>
