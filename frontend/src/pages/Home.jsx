@@ -1,5 +1,5 @@
 // frontend/src/pages/Home.jsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -7,40 +7,28 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const navigate = useNavigate();
   const driverName = localStorage.getItem('driverName');
-  const role = localStorage.getItem('role');
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    } else if (role === 'user') {
-      navigate('/schedule-pickup');
-    }
-  }, [navigate, role]);
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-column">
       <Navbar />
-      <div className="container flex-grow-1 py-5">
-        <h1 className="text-center text-primary fw-bold mb-3">
-          Welcome {driverName || 'Driver'}!
-        </h1>
-        
-        <div className="d-flex justify-content-center gap-3 mt-4">
-          <button
-            onClick={() => navigate('/driver-dashboard')}
-            className="btn btn-success px-4 py-2"
-          >
-            Today's Pickup
-          </button>
-          <button
-            onClick={() => navigate('/driver-profile')}
-            className="btn btn-primary px-4 py-2"
-          >
-            User Profile
-          </button>
+      <main className="container flex-grow-1 py-5">
+        <h1 className="h2 fw-bold text-primary mb-1">Hello, {driverName || 'Driver'}</h1>
+        <p className="text-muted mb-4">What would you like to do today?</p>
+
+        <div className="row g-3">
+          {[
+            ['Today\'s pickups', 'See your assigned stops and mark them done.', '/driver-dashboard'],
+            ['My profile', 'View and update your details.', '/driver-profile'],
+          ].map(([title, desc, path]) => (
+            <div className="col-md-6" key={path}>
+              <button type="button" className="tile" onClick={() => navigate(path)}>
+                <strong>{title}</strong>
+                <span>{desc}</span>
+              </button>
+            </div>
+          ))}
         </div>
-      </div>
+      </main>
       <Footer />
     </div>
   );
