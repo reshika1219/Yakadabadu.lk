@@ -126,7 +126,6 @@ details summary { cursor: pointer; }
 .chip { background: var(--paper-2); border-radius: 999px; padding: 0.45rem 1rem; font-weight: 700; font-size: 0.9rem; }
 
 .rrr-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.rrr-panel img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; display: block; }
 .rrr-panel > div { padding: clamp(1.5rem, 4vw, 3rem); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 0.75rem; }
 .rrr-panel h3 { font-size: 2.2rem; }
 .rrr-panel p { color: var(--muted); font-size: 1.02rem; line-height: 1.65; margin: 0; }
@@ -190,8 +189,7 @@ details summary { cursor: pointer; }
   .hero__media img { aspect-ratio: 16 / 11; transform: none; }
   .hero__badge { left: 0.75rem; }
   .steps { grid-template-columns: 1fr; }
-  .rrr-panel img { height: 240px; min-height: 0; }
-  .auth__brand { padding: 1.5rem; }
+    .auth__brand { padding: 1.5rem; }
   .auth__brand h2 { font-size: 1.6rem; }
 }
 @media (max-width: 480px) { .quick__row { grid-template-columns: 1fr; } }
@@ -229,7 +227,7 @@ details summary { cursor: pointer; }
 .material-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.9rem; }
 .material-tile { display: grid; justify-items: center; gap: 0.35rem; text-align: center; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 1.25rem 0.75rem; color: inherit; text-decoration: none; transition: transform 0.15s, border-color 0.15s; }
 .material-tile:hover { transform: translateY(-3px); border-color: var(--forest); color: inherit; }
-.material-tile span { color: var(--muted); font-size: 0.88rem; }
+.material-tile > span:last-child { color: var(--muted); font-size: 0.88rem; }
 .benefits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 1.4rem; background: var(--paper-2); border-radius: var(--radius); }
 .benefits li { display: flex; gap: 0.75rem; align-items: flex-start; }
 .benefits svg { flex-shrink: 0; width: 26px; height: 26px; color: var(--leaf); margin-top: 0.1rem; }
@@ -266,7 +264,15 @@ details summary { cursor: pointer; }
 @media (max-width: 760px) { .rrr-cards { grid-template-columns: 1fr; } }
 
 /* ---------- Centered listing row on the home page ---------- */
-.listing-grid--center { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.1rem; }
+.listing-grid.listing-grid--center { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.1rem; }
 .listing-grid--center .listing { width: 255px; max-width: 100%; }
 .listing-grid--center .listing__body { text-align: center; justify-items: center; }
-@media (max-width: 575px) { .listing-grid--center { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; } .listing-grid--center .listing { width: auto; } }
+@media (max-width: 575px) { .listing-grid.listing-grid--center { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; } .listing-grid--center .listing { width: auto; } }
+
+/* ---------- Equal-height Reduce / Reuse / Recycle panels ---------- */
+.rrr-stack { display: grid; }
+.rrr-stack > .rrr-panel { grid-area: 1 / 1; visibility: hidden; opacity: 0; transition: opacity 0.25s; }
+.rrr-stack > .rrr-panel.is-active { visibility: visible; opacity: 1; }
+
+.rrr-panel__media { position: relative; min-height: 340px; background: var(--paper-2); }
+.rrr-panel__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
