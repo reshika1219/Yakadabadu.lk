@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LuArrowRight, LuTrendingUp, LuTrendingDown, LuMinus, LuCalendarPlus, LuTruck, LuHandCoins, LuScale, LuMapPin, LuReceipt, LuStore, LuCheck } from "react-icons/lu";
+import { LuArrowRight, LuTrendingUp, LuTrendingDown, LuMinus, LuCalendarPlus, LuTruck, LuHandCoins, LuScale, LuMapPin, LuReceipt, LuStore, LuCheck, LuLeaf, LuRepeat, LuRecycle } from "react-icons/lu";
 import { useFetch } from "../api";
 import { useAuth, HOME } from "../auth";
 import { MATERIALS, money } from "../lib/format";
@@ -8,9 +8,6 @@ import { ListingTile } from "./public/Marketplace";
 import { MatIcon } from "../components/pickup";
 import { FAQ } from "../lib/content";
 import heroImage from "../images/hero.jpg";
-import reduceIcon from "../images/reduce-icon.svg";
-import reuseIcon from "../images/reuse-icon.svg";
-import recycleIcon from "../images/recycle-icon.svg";
 import reduceImage from "../images/reduce.jpg";
 import reuseImage from "../images/reuse.png";
 import recycleImage from "../images/recycle.jpg";
@@ -19,24 +16,32 @@ const tabs = [
   {
     id: 'reduce',
     label: 'Reduce',
-    icon: reduceIcon,
+    icon: LuLeaf,
+    tagline: 'Less waste at home',
     image: reduceImage,
-    text: 'We make it easy to responsibly dispose of your waste with pickup scheduling for metal, plastic, paper, glass, e-waste and wood. Less buildup means a cleaner home, and your materials go straight to the right channels.',
-    cta: ['Schedule pickup', '/login?mode=register'],
+    text: 'We make it easy to dispose of scrap responsibly. Book a pickup for metal, plastic, paper, glass, e-waste or wood and it leaves your home the same week, headed for the right channel.',
+    points: ['Book a pickup in about a minute', 'Free doorstep collection', 'Fair, per-kilogram prices'],
+    cta: ['Schedule a pickup', 'start'],
   },
   {
     id: 'reuse',
     label: 'Reuse',
-    icon: reuseIcon,
+    icon: LuRepeat,
+    tagline: 'A second life for good items',
     image: reuseImage,
-    text: 'Not everything is waste. We assess, repair and resell usable materials, giving them a second life and cutting demand for new production.',
+    text: 'Not everything is waste. List furniture, electronics and tools that still work, or find a bargain from someone nearby, and keep usable things out of the scrap pile.',
+    points: ['Browse reviewed second-hand listings', 'Sell items that still work', '10% fee only when something sells'],
+    cta: ['Browse the marketplace', '/marketplace'],
   },
   {
     id: 'recycle',
     label: 'Recycle',
-    icon: recycleIcon,
+    icon: LuRecycle,
+    tagline: 'Back into the supply chain',
     image: recycleImage,
-    text: 'We partner with specialised recycling companies so your metal, plastic and other recyclables are turned into new, usable products.',
+    text: 'We sort what we collect and pass it to specialised recycling partners, so metal, plastic and paper become new, usable products instead of landfill.',
+    points: ['Sorted and weighed by material', 'Passed to specialised recyclers', 'A digital invoice for every payout'],
+    cta: ['See today\'s prices', '/prices'],
   },
 ];
 
@@ -154,10 +159,13 @@ const Homepage = () => {
         <div className="section__head">
           <span className="eyebrow">Our approach</span>
           <h2>Reduce. Reuse. Recycle.</h2>
+          <p className="text-muted mb-0">Three habits that keep materials in use. Pick one to see how we help.</p>
         </div>
-        <div className="rrr-center">
-          <div className="rrr-tabs" role="tablist" aria-label="Reduce, reuse, recycle">
-            {tabs.map((t) => (
+
+        <div className="rrr-cards" role="tablist" aria-label="Reduce, reuse, recycle">
+          {tabs.map((t, i) => {
+            const Icon = t.icon;
+            return (
               <button
                 key={t.id}
                 type="button"
@@ -165,14 +173,14 @@ const Homepage = () => {
                 id={`tab-${t.id}`}
                 aria-selected={activeTab === t.id}
                 aria-controls="rrr-panel"
-                className={`rrr-tab ${activeTab === t.id ? 'is-active' : ''}`}
+                className={`rrr-card ${activeTab === t.id ? 'is-active' : ''}`}
                 onClick={() => setActiveTab(t.id)}
               >
-                <img src={t.icon} alt="" />
-                {t.label}
+                <span className="rrr-card__icon"><Icon aria-hidden="true" /></span>
+                <span className="rrr-card__text"><small>Step {i + 1}</small><strong>{t.label}</strong><span>{t.tagline}</span></span>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
         <div id="rrr-panel" role="tabpanel" aria-labelledby={`tab-${active.id}`} className="rrr-panel">
@@ -180,9 +188,12 @@ const Homepage = () => {
           <div>
             <h3>{active.label}</h3>
             <p>{active.text}</p>
-            {active.cta && (
-              <button type="button" className="btn btn-success" onClick={() => navigate(startPath)}>{active.cta[0]}</button>
-            )}
+            <ul className="checks list-unstyled">
+              {active.points.map((pt) => <li key={pt}><span><LuCheck aria-hidden="true" /></span>{pt}</li>)}
+            </ul>
+            <button type="button" className="btn btn-success" onClick={() => navigate(active.cta[1] === 'start' ? startPath : active.cta[1])}>
+              {active.cta[0]} <LuArrowRight aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
@@ -193,7 +204,7 @@ const Homepage = () => {
             <span className="eyebrow">Marketplace</span>
             <h2>Fresh from our community</h2>
           </div>
-          <div className="listing-grid">{listings.slice(0, 4).map((l) => <ListingTile key={l._id} listing={l} base="/marketplace" />)}</div>
+          <div className="listing-grid listing-grid--center">{listings.slice(0, 4).map((l) => <ListingTile key={l._id} listing={l} base="/marketplace" />)}</div>
           <div className="text-center mt-4"><Link to="/marketplace" className="btn btn-outline-success">Browse all items <LuArrowRight aria-hidden="true" /></Link></div>
         </section>
       )}
