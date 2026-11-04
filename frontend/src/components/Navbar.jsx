@@ -6,7 +6,8 @@ import logo from '../assets/logo.png';
 const Navbar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const driverName = localStorage.getItem('driverName');
+  const name = localStorage.getItem('driverName');
+  const role = localStorage.getItem('role');
 
   const handleLogout = () => {
     ['token', 'driverName', 'role'].forEach((k) => localStorage.removeItem(k));
@@ -14,30 +15,28 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ backgroundColor: '#144A20' }} className="navbar navbar-expand-md navbar-dark">
-      <div className="container">
-        <Link to="/">
-          <img src={logo} alt="Logo" style={{ width: '80px', height: '40px', marginRight: '20px' }} />
+    <header className="site-nav">
+      <nav className="container site-nav__inner" aria-label="Main">
+        <Link to="/" aria-label="Yakadabadu.lk home">
+          <img src={logo} alt="" className="site-nav__logo" />
         </Link>
 
-        <ul className="navbar-nav ms-auto flex-row align-items-center">
-          {driverName && (
-            <li className="nav-item me-3">
-              <span className="nav-link text-white">Welcome, {driverName}</span>
-            </li>
+        <div className="site-nav__actions">
+          {token && role === 'user' && (
+            <Link className="site-nav__link" to="/schedule-pickup">Schedule pickup</Link>
           )}
-          <li className="nav-item">
-            {token ? (
-              <button className="btn btn-link text-white" onClick={handleLogout}>
-                Logout
-              </button>
-            ) : (
-              <Link className="btn btn-link text-white" to="/login">Login</Link>
-            )}
-          </li>
-        </ul>
-      </div>
-    </nav>
+          {token && role === 'driver' && (
+            <Link className="site-nav__link" to="/home">Dashboard</Link>
+          )}
+          {name && <span className="site-nav__user d-none d-sm-inline">Hi, {name}</span>}
+          {token ? (
+            <button type="button" className="site-nav__btn" onClick={handleLogout}>Log out</button>
+          ) : (
+            <Link className="site-nav__btn" to="/login">Log in</Link>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 };
 
