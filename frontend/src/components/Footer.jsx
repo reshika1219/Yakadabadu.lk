@@ -1,65 +1,38 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaLinkedin, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { MdEmail } from 'react-icons/md';
 import logo from '../assets/logo.png';
 
-const Footer = () => {
-  return (
-    <footer style={{ backgroundColor: '#144A20' }} className="text-white py-4">
-      <div className="container">
-        <div className="row">
+const socials = [
+  ['LinkedIn', FaLinkedin],
+  ['Instagram', FaInstagram],
+  ['Twitter', FaTwitter],
+  ['Facebook', FaFacebook],
+];
 
-          {/* Logo and Social Icons */}
-          <div className="col-md-3 mb-4 mb-md-0 d-flex flex-column align-items-start">
-            <div className="d-flex align-items-center mb-3">
-              <img src={logo} alt="Logo" style={{ width: '150px', height: '75px', marginRight: '20px' }} />
-            </div>
-            <div className="d-flex">
-              <a href="#" className="text-white me-3"><FaLinkedin size={20} /></a>
-              <a href="#" className="text-white me-3"><FaInstagram size={20} /></a>
-              <a href="#" className="text-white me-3"><FaTwitter size={20} /></a>
-              <a href="#" className="text-white"><FaFacebook size={20} /></a>
-            </div>
-          </div>
-
-          {/* Links Column 1 */}
-          <div className="col-md-3 mb-4 mb-md-0">
-            <ul className="list-unstyled">
-              <li><a href="/about-us" className="text-white text-decoration-none">About Us</a></li>
-              <li><a href="/privacy-policy" className="text-white text-decoration-none">Privacy Policy</a></li>
-              <li><a href="/terms" className="text-white text-decoration-none">Term & Condition</a></li>
-              <li><a href="/delivery-details" className="text-white text-decoration-none">Delivery Details</a></li>
-              <li><a href="/return-policy" className="text-white text-decoration-none">Return Policy</a></li>
-            </ul>
-          </div>
-
-          {/* Links Column 2 */}
-          <div className="col-md-3 mb-4 mb-md-0">
-            <ul className="list-unstyled">
-              <li><a href="/contact-us" className="text-white text-decoration-none">Contact Us</a></li>
-              <li><a href="/my-orders" className="text-white text-decoration-none">My orders</a></li>
-              <li><a href="/faqs" className="text-white text-decoration-none">FAQs</a></li>
-            </ul>
-          </div>
-
-          {/* Subscribe Section */}
-          <div className="col-md-3">
-            <h6 className="mb-2 d-flex align-items-center">
-              <MdEmail size={20} className="me-2" /> SUBSCRIBE
-            </h6>
-            <div className="input-group">
-              <input type="email" className="form-control" placeholder="Email Address..." />
-              <button className="btn btn-light">BUTTON</button>
-            </div>
-          </div>
-        </div>
+const Footer = () => (
+  <footer className="site-footer">
+    <div className="container site-footer__inner">
+      <div>
+        <img src={logo} alt="Yakadabadu.lk" className="site-footer__logo" />
+        <p className="site-footer__tag">Scrap pickup made simple.</p>
       </div>
 
-      <div className="text-center mt-4">
-        <small>&copy; 2025 Yakadabadu.lk. All rights reserved.</small>
-      </div>
-    </footer>
-  );
-};
+      <nav aria-label="Footer" className="site-footer__links">
+        <Link to="/schedule-pickup">Schedule a pickup</Link>
+        <Link to="/login">Log in</Link>
+      </nav>
+
+      <ul className="site-footer__social list-unstyled">
+        {socials.map(([label, Icon]) => (
+          <li key={label}>
+            <a href="#" aria-label={label}><Icon size={18} aria-hidden="true" /></a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <p className="site-footer__copy">&copy; {new Date().getFullYear()} Yakadabadu.lk</p>
+  </footer>
+);
 
 export default Footer;
