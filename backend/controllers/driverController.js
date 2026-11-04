@@ -1,197 +1,106 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import Driver from '../models/Driver.js';
+import Pickup from '../models/Pickup.js';
+import { signToken } from '../middleware/authMiddleware.js';
+import { HttpError, must } from '../utils/http.js';
 
-// Register a new driver
-export const registerDriver = async (req, res) => {
-  try {
-    const {
-      firstName,
-      middleName,
-      lastName,
-      email,
-      password,
-      birthday,
-      nationality,
-      employeeId,
-      employeeType,
-      nic,
-      employeeStatus,
-      joinedDate,
-    } = req.body;
+const STAFF_FIELDS = ['firstName', 'middleName', 'lastName', 'phone', 'birthday', 'nationality', 'employeeType', 'employeeStatus', 'nic', 'vehicleCategory', 'vehicleNumber', 'role', 'status', 'joinedDate'];
+const pick = (obj, keys) => Object.fromEntries(keys.filter((k) => obj[k] !== undefined).map((k) => [k, obj[k]]));
 
-    const existingDriver = await Driver.findOne({ email });
-    if (existingDriver) {
-      return res.status(400).json({ error: 'Driver already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const driver = new Driver({
-      firstName,
-      middleName,
-      lastName,
-      email,
-      password: hashedPassword,
-      birthday,
-      nationality,
-      employeeId,
-      employeeType,
-      nic,
-      employeeStatus,
-      joinedDate,
-    });
-
-    await driver.save();
-
-    const token = jwt.sign({ id: driver._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    res.status(201).json({ driver, token });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Login driver
+// Staff login (drivers and admins)
 export const loginDriver = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const driver = await Driver.findOne({ email });
-    if (!driver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-
-    const isMatch = await bcrypt.compare(password, driver.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    const token = jwt.sign({ id: driver._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    res.status(200).json({
-      token,
-      driver: {
-        id: driver._id,
-        name: `${driver.firstName} ${driver.lastName}`,
-        email: driver.email,
-      },
-    });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const { email, password } = req.body;
+  const driver = await Driver.findOne({ email: (email || '').toLowerCase().trim() });
+  if (!driver || !(await bcrypt.compare(password || '', driver.password))) throw new HttpError(401, 'Invalid email or password');
+  if (driver.employeeStatus === 'Inactive') throw new HttpError(403, 'This staff account is inactive');
+  res.json({
+    token: signToken(driver._id),
+    role: driver.role,
+    driver: { id: driver._id, name: driver.name, email: driver.email, role: driver.role },
+  });
 };
 
-// Get all drivers
-export const getDrivers = async (req, res) => {
-  try {
-    const drivers = await Driver.find().select('-password');
-    res.status(200).json(drivers);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// Admin adds staff
+export const createStaff = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password || password.length < 8) throw new HttpError(400, 'Email and a password of at least 8 characters are required');
+  if (await Driver.findOne({ email: email.toLowerCase() })) throw new HttpError(400, 'A staff member with that email already exists');
+  const driver = await Driver.create({ ...pick(req.body, STAFF_FIELDS), email: email.toLowerCase(), password: await bcrypt.hash(password, 10) });
+  res.status(201).json(driver);
 };
 
-// Get current authenticated driver's profile
+// Staff list with performance stats (admin)
+export const getDrivers = async (_req, res) => {
+  const drivers = await Driver.find().sort({ role: 1, firstName: 1 });
+  const stats = await Pickup.aggregate([
+    { $match: { driver: { $ne: null } } },
+    { $group: {
+      _id: '$driver',
+      assigned: { $sum: { $cond: [{ $in: ['$status', ['assigned', 'on-the-way']] }, 1, 0] } },
+      completed: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
+      cancelled: { $sum: { $cond: [{ $eq: ['$status', 'cancelled'] }, 1, 0] } },
+      kg: { $sum: { $ifNull: ['$weight', 0] } },
+      rating: { $avg: '$rating.stars' },
+      reviews: { $sum: { $cond: [{ $gt: ['$rating.stars', 0] }, 1, 0] } },
+    } },
+  ]);
+  const byId = Object.fromEntries(stats.map((s) => [s._id.toString(), s]));
+  res.json(drivers.map((d) => {
+    const s = byId[d._id.toString()] || {};
+    return { ...d.toJSON(), stats: { assigned: s.assigned || 0, completed: s.completed || 0, cancelled: s.cancelled || 0, kg: s.kg || 0, rating: s.rating ? Math.round(s.rating * 10) / 10 : null, reviews: s.reviews || 0 } };
+  }));
+};
+
 export const getCurrentDriver = async (req, res) => {
-  try {
-    const driver = await Driver.findById(req.user.id).select('-password');
-    if (!driver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-
-    const driverObj = driver.toObject();
-    driverObj.fullName = `${driver.firstName} ${driver.lastName}`;
-
-    res.status(200).json(driverObj);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json({ ...req.user.toJSON(), fullName: req.user.name });
 };
 
-// Get driver by ID
 export const getDriverById = async (req, res) => {
-  try {
-    const driverId = req.params.id;
-    const driver = await Driver.findById(driverId).select('-password');
-    if (!driver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-    res.status(200).json(driver);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(must(await Driver.findById(req.params.id), 404, 'Staff member not found'));
 };
 
-// Update driver details
+// Admin edits staff (whitelisted fields only)
 export const updateDriver = async (req, res) => {
-  try {
-    const driverId = req.params.id;
-    const updates = req.body;
-    const updatedDriver = await Driver.findByIdAndUpdate(driverId, updates, {
-      new: true,
-    }).select('-password');
-    if (!updatedDriver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-    res.status(200).json(updatedDriver);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  const driver = must(await Driver.findById(req.params.id), 404, 'Staff member not found');
+  if (req.params.id === req.user._id.toString() && req.body.role && req.body.role !== 'admin') throw new HttpError(400, 'You cannot remove your own admin access');
+  Object.assign(driver, pick(req.body, STAFF_FIELDS));
+  if (req.body.password) {
+    if (req.body.password.length < 8) throw new HttpError(400, 'Password must be at least 8 characters');
+    driver.password = await bcrypt.hash(req.body.password, 10);
   }
+  await driver.save();
+  res.json(driver);
 };
 
-// Update driver location
-export const updateDriverLocation = async (req, res) => {
-  try {
-    const { driverId, lat, lng } = req.body;
-    const driver = await Driver.findByIdAndUpdate(
-      driverId,
-      { currentLocation: { lat, lng } },
-      { new: true }
-    );
-    res.status(200).json(driver);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Delete a driver
 export const deleteDriver = async (req, res) => {
-  try {
-    const driverId = req.params.id;
-    const deletedDriver = await Driver.findByIdAndDelete(driverId);
-    if (!deletedDriver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-    res.status(200).json({ message: 'Driver deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  if (req.params.id === req.user._id.toString()) throw new HttpError(400, 'You cannot delete your own account');
+  const driver = must(await Driver.findByIdAndDelete(req.params.id), 404, 'Staff member not found');
+  await Pickup.updateMany({ driver: driver._id, status: { $in: ['assigned', 'on-the-way'] } }, { $set: { status: 'pending' }, $unset: { driver: '' } });
+  res.json({ message: 'Staff member removed; their open pickups are back in the queue' });
 };
 
-// Upload Profile Picture
+// Self-service
+export const updateMe = async (req, res) => {
+  const allowed = pick(req.body, ['phone', 'vehicleCategory', 'vehicleNumber', 'status', 'profilePicture']);
+  if (allowed.status && !['available', 'unavailable'].includes(allowed.status)) throw new HttpError(400, 'Status must be available or unavailable');
+  res.json(await Driver.findByIdAndUpdate(req.user._id, allowed, { new: true }));
+};
+
+export const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const driver = await Driver.findById(req.user._id);
+  if (!(await bcrypt.compare(currentPassword || '', driver.password))) throw new HttpError(400, 'Current password is incorrect');
+  if (!newPassword || newPassword.length < 8) throw new HttpError(400, 'New password must be at least 8 characters');
+  driver.password = await bcrypt.hash(newPassword, 10);
+  await driver.save();
+  res.json({ message: 'Password updated' });
+};
+
+export const updateDriverLocation = async (req, res) => {
+  const { lat, lng } = req.body;
+  res.json(await Driver.findByIdAndUpdate(req.user._id, { currentLocation: { lat, lng } }, { new: true }));
+};
+
 export const uploadProfilePicture = async (req, res) => {
-  try {
-    const driverId = req.user.id; // Assuming the driver is authenticated
-    const { profilePicture } = req.body; // Base64-encoded image
-
-    const driver = await Driver.findByIdAndUpdate(
-      driverId,
-      { profilePicture },
-      { new: true }
-    ).select('-password');
-
-    if (!driver) {
-      return res.status(404).json({ error: 'Driver not found' });
-    }
-
-    res.status(200).json(driver);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(await Driver.findByIdAndUpdate(req.user._id, { profilePicture: req.body.profilePicture }, { new: true }));
 };

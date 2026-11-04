@@ -1,34 +1,24 @@
 import express from 'express';
-import {
-  registerDriver,
-  loginDriver,
-  getDrivers,
-  getDriverById,
-  updateDriver,
-  deleteDriver,
-  updateDriverLocation,
-  uploadProfilePicture,
-  getCurrentDriver // Add this import
-} from '../controllers/driverController.js';
-import { protect, driverOnly } from '../middleware/authMiddleware.js';
+import * as c from '../controllers/driverController.js';
+import { protect, staffOnly, adminOnly } from '../middleware/authMiddleware.js';
+import { wrap } from '../utils/http.js';
 
 const router = express.Router();
 
-// Public routes
-router.post('/register', registerDriver);
-router.post('/login', loginDriver);
+router.post('/login', wrap(c.loginDriver));
 
-router.get('/me', protect, driverOnly, getCurrentDriver); // New route to get current driver's details
-router.get('/', protect, driverOnly, getDrivers);
-router.get('/:id', protect, driverOnly, getDriverById);
+router.use(protect, staffOnly);
+router.get('/me', wrap(c.getCurrentDriver));
+router.put('/me', wrap(c.updateMe));
+router.put('/me/password', wrap(c.changePassword));
+router.post('/update-location', wrap(c.updateDriverLocation));
+router.post('/upload-profile-picture', wrap(c.uploadProfilePicture));
 
-router.put('/:id', protect, driverOnly, updateDriver);
-router.delete('/:id', protect, driverOnly, deleteDriver);
-
-// Add the update-location route
-router.post('/update-location', protect, driverOnly, updateDriverLocation);
-
-// Add the upload-profile-picture route
-router.post('/upload-profile-picture', protect, driverOnly, uploadProfilePicture);
+router.get('/', adminOnly, wrap(c.getDrivers));
+router.post('/', adminOnly, wrap(c.createStaff));
+router.post('/register', adminOnly, wrap(c.createStaff));
+router.get('/:id', adminOnly, wrap(c.getDriverById));
+router.put('/:id', adminOnly, wrap(c.updateDriver));
+router.delete('/:id', adminOnly, wrap(c.deleteDriver));
 
 export default router;
