@@ -10,6 +10,8 @@ import { SHOW_DEMO, DEMO_ACCOUNTS, DEMO_PASSWORD } from '../lib/demo';
 import { Avatar } from '../components/ui';
 import { toast } from 'react-toastify';
 
+const SHORT = { Dashboard: 'Home', 'My pickups': 'Pickups', 'Book a pickup': 'Book', 'Browse items': 'Browse', 'Profile & settings': 'Profile', 'Availability & leave': 'Shift', 'Staff & drivers': 'Staff', Marketplace: 'Market' };
+
 /* ---------- Sidebar ---------- */
 const Sidebar = ({ role, onNavigate, unread }) => {
   const nav = NAV[role];
@@ -295,7 +297,7 @@ const AppLayout = ({ role }) => {
           const Icon = t.icon;
           return (
             <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => `tabbar__item ${isActive ? 'is-active' : ''}`}>
-              <Icon aria-hidden="true" /><span>{t.label.split(' ')[0]}</span>
+              <Icon aria-hidden="true" /><span>{SHORT[t.label] || t.label.split(' ')[0]}</span>
             </NavLink>
           );
         })}

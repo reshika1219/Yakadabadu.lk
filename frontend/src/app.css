@@ -206,7 +206,7 @@ a.row-item:hover { background: var(--paper); color: inherit; }
 .row-item__side { text-align: right; }
 .mat-dot { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: #fff; flex-shrink: 0; font-size: 1.05rem; }
 .dt-wrap { overflow-x: auto; }
-.dt { width: 100%; border-collapse: collapse; }
+.dt { width: 100%; min-width: 760px; border-collapse: collapse; }
 .dt th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--paper-2); padding: 0.75rem 1rem; white-space: nowrap; }
 .dt th.sortable { cursor: pointer; user-select: none; }
 .dt td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -333,3 +333,8 @@ a.row-item:hover { background: var(--paper); color: inherit; }
 .staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
 .min-w-0 { min-width: 0; }
 .pill--info { background: #dbeafe; color: #1e4f8f; }
+
+@media (max-width: 575px) {
+  .crumbs li:not(.is-current) { display: none; }
+  .crumbs li + li::before { content: none; }
+}
