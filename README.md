@@ -4,7 +4,7 @@ Scrap pickup, made simple. Customers book metal, plastic or wood pickups, driver
 
 ## Features
 - **Customers:** register, log in and schedule a pickup (item type, size, date, what they want in return).
-- **Drivers:** see assigned pickups on a map, complete or cancel them with weight and amount, download the list as a PDF, manage their profile.
+- **Drivers:** see assigned pickups pinned on a map, complete or cancel them with weight and amount, download the list as a PDF, manage their profile.
 - **Admins:** assign drivers to pickups and optimise routes with Google Maps.
 
 ## Tech stack
@@ -12,10 +12,10 @@ Scrap pickup, made simple. Customers book metal, plastic or wood pickups, driver
 | --- | --- |
 | Frontend | React 19, Vite, Bootstrap 5, React Router |
 | Backend | Node.js, Express, MongoDB (Mongoose), JWT, Joi |
-| Services | Google Maps (Directions and map display) |
+| Maps | Leaflet with OpenStreetMap tiles (no key needed); Google Directions for route optimisation |
 
 ## Getting started
-**Prerequisites:** Node.js 18+. No database install is needed. A Google Maps API key is optional (only maps and route optimisation use it).
+**Prerequisites:** Node.js 18+. No database install is needed. A Google Maps API key is optional (only route optimisation uses it).
 
 ```bash
 git clone https://github.com/reshika1219/Yakadabadu.lk.git
@@ -47,7 +47,7 @@ By default (`MONGODB_URI=memory`) the API starts an embedded MongoDB and keeps i
 | | `JWT_SECRET` | Secret used to sign login tokens (use a long random value) |
 | | `GOOGLE_MAPS_API_KEY` | Route optimisation |
 | | `PORT` | API port (default `5001`) |
-| `frontend/.env` | `VITE_GOOGLE_MAPS_API_KEY` | Map display |
+| `frontend/.env` | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 | | `VITE_DEMO_LOGIN` | Set to `false` to hide the quick-login buttons |
 | | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 
