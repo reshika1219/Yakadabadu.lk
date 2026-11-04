@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import { LuArrowRight, LuTrendingUp, LuTrendingDown, LuMinus } from "react-icons/lu";
+import { useFetch } from "../api";
+import { useAuth, HOME } from "../auth";
+import { MATERIALS, money } from "../lib/format";
+import { ListingTile } from "./public/Marketplace";
 import heroImage from "../images/hero.jpg";
 import reduceIcon from "../images/reduce-icon.svg";
 import reuseIcon from "../images/reuse-icon.svg";
@@ -17,7 +20,7 @@ const tabs = [
     icon: reduceIcon,
     image: reduceImage,
     text: 'We make it easy to responsibly dispose of your waste with pickup scheduling and drop-off services for metal and plastic. Less buildup means a cleaner environment, and your materials go straight to the right channels.',
-    cta: ['Schedule pickup', '/schedule-pickup'],
+    cta: ['Schedule pickup', '/login?mode=register'],
   },
   {
     id: 'reuse',
@@ -39,14 +42,15 @@ const Homepage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('reduce');
   const active = tabs.find((t) => t.id === activeTab);
-  const startPath = localStorage.getItem('token') ? '/schedule-pickup' : '/login';
+  const { isAuthed, role } = useAuth();
+  const { data: rateData } = useFetch('/rates');
+  const { data: listings } = useFetch('/listings?sort=newest');
+  const startPath = !isAuthed ? '/login?mode=register' : role === 'user' ? '/app/schedule' : HOME[role];
 
   const scrollToHow = () => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <div>
-      <Navbar />
-
       <main className="container">
         <section className="hero">
           <div>
@@ -66,6 +70,25 @@ const Homepage = () => {
             </div>
           </div>
         </section>
+
+        {rateData && (
+          <section className="rates-strip" aria-label="Today's prices">
+            <span className="rates-strip__title">Today&rsquo;s prices <small>per kg</small></span>
+            <ul className="list-unstyled">
+              {rateData.rates.map((r) => {
+                const Trend = r.change > 0 ? LuTrendingUp : r.change < 0 ? LuTrendingDown : LuMinus;
+                return (
+                  <li key={r.material}>
+                    <span>{MATERIALS[r.material]?.label || r.label}</span>
+                    <strong>{money(r.pricePerKg)}</strong>
+                    <Trend aria-hidden="true" className={r.change > 0 ? 'text-up' : r.change < 0 ? 'text-down' : 'text-muted'} />
+                  </li>
+                );
+              })}
+            </ul>
+            <Link to="/prices" className="rates-strip__link">Estimate your payout <LuArrowRight aria-hidden="true" /></Link>
+          </section>
+        )}
 
         <section className="section" id="how">
           <div className="section__head">
@@ -120,13 +143,21 @@ const Homepage = () => {
           </div>
         </section>
 
+        {listings?.length > 0 && (
+          <section className="section pt-0">
+            <div className="d-flex justify-content-between align-items-end flex-wrap gap-2 section__head" style={{ maxWidth: 'none' }}>
+              <div><span className="eyebrow">Marketplace</span><h2>Fresh from our community</h2></div>
+              <Link to="/marketplace" className="btn btn-outline-success">Browse all <LuArrowRight aria-hidden="true" /></Link>
+            </div>
+            <div className="listing-grid">{listings.slice(0, 4).map((l) => <ListingTile key={l._id} listing={l} base="/marketplace" />)}</div>
+          </section>
+        )}
+
         <section className="cta-band">
           <h2>Ready to clear the clutter?</h2>
           <button type="button" className="btn btn-success btn-lg" onClick={() => navigate(startPath)}>Book your pickup</button>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };
