@@ -111,3 +111,48 @@ h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.2; }
 .site-footer a:hover { text-decoration: underline; }
 .site-footer__social { display: flex; gap: 1rem; margin: 0; }
 .site-footer__copy { text-align: center; font-size: 0.8rem; margin: 2rem 0 0; opacity: 0.7; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; display: grid; place-items: center; min-height: 420px; color: #fff; text-align: center; }
+.hero__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(15, 58, 25, 0.55), rgba(15, 58, 25, 0.75)); z-index: 1; }
+.hero__text { position: relative; z-index: 2; padding: 3rem 1rem; max-width: 720px; }
+.hero__text h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; }
+.hero__text p { font-size: 1.15rem; opacity: 0.92; margin: 1rem 0 1.75rem; }
+.btn-cta {
+  background: var(--accent);
+  color: var(--brand-900);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.85rem 2rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-cta:hover { background: var(--accent-strong); transform: translateY(-1px); }
+
+/* ---------- Reduce / Reuse / Recycle ---------- */
+.rrr-tabs { display: flex; justify-content: center; gap: 0.5rem; margin: 2.5rem 0 1.5rem; flex-wrap: wrap; }
+.rrr-tab {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.55rem 1.25rem; font-weight: 600;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.rrr-tab img { width: 20px; height: 20px; }
+.rrr-tab:hover { border-color: var(--brand-600); }
+.rrr-tab.is-active { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+.rrr-tab.is-active img { filter: brightness(0) invert(1); }
+
+.rrr-panel {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; align-items: center;
+  max-width: 960px; margin: 0 auto; padding: 1.5rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-md);
+}
+.rrr-panel img { width: 100%; height: 280px; object-fit: cover; border-radius: 10px; }
+.rrr-panel p { color: var(--ink-muted); line-height: 1.7; }
+@media (max-width: 768px) {
+  .rrr-panel { grid-template-columns: 1fr; }
+  .rrr-panel img { height: 200px; }
+}
