@@ -4,7 +4,6 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { API_URL } from '../api';
 
-
 const emptyForm = { name: '', email: '', password: '', address: '', phone: '' };
 
 const Login = () => {
@@ -74,19 +73,32 @@ const Login = () => {
   return (
     <div className="bg-light min-vh-100">
       <Navbar />
-      <div className="container mt-5">
+      <main className="container py-5">
         <div className="row justify-content-center">
           <div className="col-md-6 col-lg-4">
             <div className="card shadow-lg">
               <div className="card-body p-4">
-                <div className="btn-group w-100 mb-4" role="group">
-                  <button type="button" className={`btn ${role === 'driver' ? 'btn-success' : 'btn-outline-success'}`} onClick={() => switchRole('driver')}>Driver</button>
-                  <button type="button" className={`btn ${role === 'user' ? 'btn-success' : 'btn-outline-success'}`} onClick={() => switchRole('user')}>Customer</button>
+                <div className="segmented mb-4" role="tablist" aria-label="Account type">
+                  {[['driver', 'Driver'], ['user', 'Customer']].map(([r, label]) => (
+                    <button
+                      key={r}
+                      type="button"
+                      role="tab"
+                      aria-selected={role === r}
+                      className={role === r ? 'is-active' : ''}
+                      onClick={() => switchRole(r)}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
-                <h2 className="text-center mb-4 fw-bold text-primary">
-                  {role === 'driver' ? 'Driver Login' : register ? 'Create Account' : 'Customer Login'}
-                </h2>
-                {error && <div className="alert alert-danger">{error}</div>}
+                <h1 className="h3 text-center mb-1 fw-bold text-primary">
+                  {role === 'driver' ? 'Welcome back' : register ? 'Create your account' : 'Welcome back'}
+                </h1>
+                <p className="text-center text-muted mb-4">
+                  {role === 'driver' ? 'Log in to see your pickups.' : register ? 'It takes less than a minute.' : 'Log in to schedule a pickup.'}
+                </p>
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                   {role === 'user' && register && field('name', 'Name', 'text', 'name')}
@@ -95,7 +107,7 @@ const Login = () => {
                   {role === 'user' && register && field('address', 'Address', 'text', 'street-address')}
                   {role === 'user' && register && field('phone', 'Phone', 'tel', 'tel')}
 
-                  <button type="submit" className="btn btn-primary w-100 py-2" disabled={isSubmitting}>
+                  <button type="submit" className="btn btn-success w-100 py-2" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
@@ -114,7 +126,7 @@ const Login = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

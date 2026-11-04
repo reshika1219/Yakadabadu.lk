@@ -77,11 +77,11 @@ function SchedulePickup() {
               <img src={scheduleImage} alt="Yakadabadu.lk" className="w-100 h-100" style={{ objectFit: 'cover' }} />
             </div>
             <div className="col-md-7 p-4">
-              <h2 className="fw-bold">Schedule Pickup</h2>
-              <p className="text-muted">We help you with your waste management!</p>
+              <h1 className="h3 fw-bold">Schedule a pickup</h1>
+              <p className="text-muted">Tell us what you have and when, and we will collect it.</p>
 
-              {success && <div className="alert alert-success">Pickup scheduled successfully!</div>}
-              {error && <div className="alert alert-danger">{error}</div>}
+              {success && <div className="alert alert-success" role="status">Pickup scheduled. We will be in touch to confirm.</div>}
+              {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
               <form onSubmit={handleSubmit}>
                 {select('itemType', 'Item Type', [['metal', 'Metal'], ['plastic', 'Plastic'], ['wood', 'Wood']])}
@@ -91,9 +91,9 @@ function SchedulePickup() {
                   ['large', 'Large (10-20kg)'],
                   ['extra-large', 'Extra Large (Above 20kg)'],
                 ])}
-                {input('customerName', 'Customer Name')}
-                {input('contactNumber', 'Contact Number', { type: 'tel' })}
-                {input('address', 'Address')}
+                {input('customerName', 'Customer name', { autoComplete: 'name' })}
+                {input('contactNumber', 'Contact number', { type: 'tel', autoComplete: 'tel' })}
+                {input('address', 'Address', { autoComplete: 'street-address' })}
                 {input('pickupDate', 'Preferred Pickup Date', { type: 'date', min: today() })}
                 {select('returnOption', 'What do you want in return?', [
                   ['broom', 'Broom'],
@@ -102,7 +102,7 @@ function SchedulePickup() {
                   ['nothing', 'I want nothing—just take these and leave'],
                 ])}
                 <button type="submit" className="btn btn-success w-100 py-2 fw-bold" disabled={submitting}>
-                  {submitting ? 'Scheduling...' : 'Schedule Pickup'}
+                  {submitting ? 'Scheduling…' : 'Schedule pickup'}
                 </button>
               </form>
             </div>
