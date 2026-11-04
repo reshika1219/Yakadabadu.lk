@@ -10,7 +10,6 @@ import { API_URL } from '../api';
 import { Loading, ErrorState, Empty, StatusPill } from '../components/PageState';
 
 const DriverDashboard = () => {
-  const [location] = useState({ lat: 6.9271, lng: 79.8612 });
   const [pickups, setPickups] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentPickup, setCurrentPickup] = useState(null);
@@ -97,7 +96,7 @@ const DriverDashboard = () => {
         </div>
 
         <div className="map-frame mb-4">
-          <MapComponent location={location} />
+          <MapComponent pickups={pickups.filter((p) => p.status === 'assigned')} />
         </div>
 
         {actionError && <div className="alert alert-danger" role="alert">{actionError}</div>}

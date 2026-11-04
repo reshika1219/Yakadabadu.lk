@@ -124,6 +124,11 @@ const AdminDashboard = () => {
           )}
         </section>
 
+        <section className="mb-5" aria-labelledby="map-heading">
+          <h2 id="map-heading" className="h4 mb-3">Pickup map</h2>
+          <div className="map-frame"><MapComponent pickups={pickups} route={route} /></div>
+        </section>
+
         <section aria-labelledby="route-heading">
           <h2 id="route-heading" className="h4 mb-3">Optimise route</h2>
           <form className="card card-body" onSubmit={optimizeRoute}>
@@ -146,7 +151,6 @@ const AdminDashboard = () => {
 
           {route && (
             <div className="mt-4">
-              <div className="map-frame mb-3"><MapComponent route={route} /></div>
               <details className="card card-body">
                 <summary className="fw-semibold">Route details</summary>
                 <pre className="mt-3 mb-0 small">{JSON.stringify(route, null, 2)}</pre>
