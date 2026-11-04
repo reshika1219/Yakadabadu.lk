@@ -2,55 +2,48 @@ import jwt from 'jsonwebtoken';
 import Driver from '../models/Driver.js';
 import User from '../models/User.js';
 
-const protect = async (req, res, next) => {
-  let token;
+export const signToken = (id, days = 7) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: `${days}d` });
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+// Resolves the bearer token to a user and sets req.role to 'user' | 'driver' | 'admin'
+const protect = async (req, res, next) => {
+  const header = req.headers.authorization;
+  const token = header?.startsWith('Bearer') ? header.split(' ')[1] : null;
 
   if (!token) {
-    return res.status(401).json({
-      status: 'fail',
-      error: 'Not authorized, no token provided'
-    });
+    return res.status(401).json({ status: 'fail', error: 'Not authorized, no token provided' });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const currentDriver = await Driver.findById(decoded.id).select('-password');
-    const currentUser = currentDriver ? null : await User.findById(decoded.id).select('-password');
+    const staff = await Driver.findById(decoded.id).select('-password');
+    const customer = staff ? null : await User.findById(decoded.id).select('-password');
 
-    if (!currentDriver && !currentUser) {
-      return res.status(401).json({
-        status: 'fail',
-        error: 'The account belonging to this token no longer exists'
-      });
+    if (!staff && !customer) {
+      return res.status(401).json({ status: 'fail', error: 'The account belonging to this token no longer exists' });
+    }
+    if (customer?.suspended) {
+      return res.status(403).json({ status: 'fail', error: 'This account has been suspended' });
     }
 
-    req.user = currentDriver || currentUser;
-    req.role = currentDriver ? 'driver' : 'user';
+    req.user = staff || customer;
+    req.role = staff ? staff.role : 'user';
     next();
   } catch (error) {
-    let errorMessage = 'Not authorized, token failed';
-    if (error.name === 'TokenExpiredError') {
-      errorMessage = 'Token expired, please login again';
-    } else if (error.name === 'JsonWebTokenError') {
-      errorMessage = 'Invalid token, please login again';
-    }
-
-    return res.status(401).json({
-      status: 'fail',
-      error: errorMessage
-    });
+    const message =
+      error.name === 'TokenExpiredError' ? 'Session expired, please log in again'
+        : error.name === 'JsonWebTokenError' ? 'Invalid token, please log in again'
+          : 'Not authorized, token failed';
+    return res.status(401).json({ status: 'fail', error: message });
   }
 };
 
-const driverOnly = (req, res, next) => {
-  if (req.role !== 'driver') {
-    return res.status(403).json({ status: 'fail', error: 'Driver access only' });
-  }
-  next();
-};
+const allow = (roles, message) => (req, res, next) =>
+  roles.includes(req.role) ? next() : res.status(403).json({ status: 'fail', error: message });
 
-export { protect, driverOnly };
+const staffOnly = allow(['driver', 'admin'], 'Staff access only');
+const driverOnly = staffOnly; // kept for older imports
+const adminOnly = allow(['admin'], 'Admin access only');
+const customerOnly = allow(['user'], 'Customer access only');
+
+export { protect, driverOnly, staffOnly, adminOnly, customerOnly };
