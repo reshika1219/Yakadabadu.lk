@@ -1,185 +1,71 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ---------- Design tokens ---------- */
+:root {
+  --brand-900: #0f3a19;
+  --brand-800: #144a20;
+  --brand-600: #2e7d32;
+  --brand-100: #e8f3e9;
+  --accent: #f5a524;
+  --accent-strong: #d98a0b;
+  --ink: #1b2a1f;
+  --ink-muted: #5b6b5f;
+  --surface: #ffffff;
+  --surface-alt: #f6f8f5;
+  --line: #e1e8e2;
+  --radius: 14px;
+  --shadow-sm: 0 1px 2px rgba(15, 58, 25, 0.06), 0 1px 3px rgba(15, 58, 25, 0.08);
+  --shadow-md: 0 8px 24px rgba(15, 58, 25, 0.1);
+  --focus: 0 0 0 3px rgba(46, 125, 50, 0.35);
+
+  /* Re-point Bootstrap at our palette so every page inherits it */
+  --bs-success: var(--brand-600);
+  --bs-success-rgb: 46, 125, 50;
+  --bs-primary: var(--brand-800);
+  --bs-primary-rgb: 20, 74, 32;
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--surface);
+  --bs-border-radius: 10px;
+  --bs-link-color: var(--brand-600);
 }
 
-/* 3R Slider - Centered and Aligned Properly */
-.rrr-slider {
-    position: relative;
-    display: flex;
-    justify-content: space-evenly;  
-    align-items: center;
-    margin: 40px auto;
-    width: 80%;
-    max-width: 900px;
-    text-align: center;
-    padding: 28px 0;
-    border-top: 2px solid #ccc; /* Horizontal line added */
-    margin-bottom: 1px; 
+/* ---------- Base ---------- */
+html { scroll-behavior: smooth; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.2; }
+.bg-light { background-color: var(--surface-alt) !important; }
+.text-primary { color: var(--brand-800) !important; }
+
+.btn-success, .btn-primary {
+  --bs-btn-bg: var(--brand-600);
+  --bs-btn-border-color: var(--brand-600);
+  --bs-btn-hover-bg: var(--brand-800);
+  --bs-btn-hover-border-color: var(--brand-800);
+  --bs-btn-active-bg: var(--brand-900);
+  --bs-btn-active-border-color: var(--brand-900);
+  --bs-btn-disabled-bg: var(--brand-600);
+  --bs-btn-disabled-border-color: var(--brand-600);
+  font-weight: 600;
+}
+.btn-outline-success {
+  --bs-btn-color: var(--brand-600);
+  --bs-btn-border-color: var(--brand-600);
+  --bs-btn-hover-bg: var(--brand-600);
+  --bs-btn-hover-border-color: var(--brand-600);
+  --bs-btn-active-bg: var(--brand-800);
 }
 
-/* Center the "Reduce, Reuse, Recycle" heading */
-.rrr-section h2 {
-    position: relative;
-    top: 12px; /* Moves the text down */
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-top: 20px;
+:focus-visible { outline: none; box-shadow: var(--focus); }
+.form-control:focus, .form-select:focus {
+  border-color: var(--brand-600);
+  box-shadow: var(--focus);
 }
 
-/* 3R Circle Styles */
-.rrr-circle {
-    width: 70px;
-    height: 70px;
-    background-color: #4CAF50;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    margin: 0 20px;
-}
+.card { border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.card.shadow, .card.shadow-lg { box-shadow: var(--shadow-md) !important; }
 
-.rrr-circle img {
-    width: 50%;
-    height: 50%;
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
-
-.rrr-circle:hover,
-.rrr-circle.active {
-    background-color: #388E3C;
-    transform: scale(1.2);
-}
-
-/* Ensure the 3R content (squares) moves closer to the footer */
-.rrr-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px; /* Reduced space between the boxes and the footer */
-    margin-top: -25px;
-}
-
-/* Ensure all 3R info boxes are the same size and centered */
-.rrr-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center; /* Centering content */
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 1000px;
-    text-align: left;
-    height: 300px;  /* Ensuring uniform height */
-    margin: 20px auto; /* Centers the boxes */
-}
-
-/* Adjust image size inside 3R squares */
-.rrr-info img {
-    width: 269px; /* Increased width */
-    height: 269px; /* Increased height */
-    margin-right: 20px;
-    margin-left: -13px;;
-    border-radius: 10px;
-    object-fit: cover; /* Ensures all images fit properly */
-}
-
-/* Fix text alignment inside 3R squares */
-.rrr-info .rrr-text {
-    flex: 1; /* Allow text to take available space */
-    text-align: justify;
-    margin-left: 15px;
-}
-
-/* Hero Section Adjustments */
-.hero {
-    position: relative;
-    text-align: center;
-}
-
-.hero-image {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-}
-
-.hero-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 24px;
-    text-align: center;
-}
-
-.hero-text h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.hero-text p {
-    font-size: 1.2rem;
-    margin: 10px 0;
-}
-
-/* Get Started Button */
-.get-started-btn {
-    padding: 15px 25px; /* Increased padding */
-    background-color: #FF9800;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.3s ease;
-    margin-top: 15px;
-    font-size: 1.2rem; /* Increased text size */
-}
-
-.get-started-btn:hover {
-    background-color: #E68900;
-}
-
-/* Learn More Button */
-.learn-more-btn {
-    padding: 12px 25px;
-    background-color: #1E88E5;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 18px;
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-
-.learn-more-btn:hover {
-    background-color: #1565C0;
-}
-
-/* Additional Responsiveness Adjustments */
-@media (max-width: 768px) {
-    .rrr-info {
-        flex-direction: column;
-        text-align: center;
-        height: auto;
-    }
-    .rrr-info img {
-        margin: 20px 0;
-        width: 150px;
-        height: 150px;
-    }
-}
-
