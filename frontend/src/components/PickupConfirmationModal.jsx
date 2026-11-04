@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) => {
   const [formData, setFormData] = useState({
@@ -8,7 +8,6 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
     reason: ''
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!show) {
@@ -24,8 +23,8 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
     if (mode === 'confirm') {
       if (!formData.weight.trim()) newErrors.weight = 'Weight is required';
       if (!formData.amount.trim()) newErrors.amount = 'Amount is required';
-      if (isNaN(formData.weight)) newErrors.weight = 'Invalid weight';
-      if (isNaN(formData.amount)) newErrors.amount = 'Invalid amount';
+      if (!(parseFloat(formData.weight) > 0)) newErrors.weight = 'Enter a weight above 0';
+      if (!(parseFloat(formData.amount) >= 0)) newErrors.amount = 'Enter an amount of 0 or more';
     } else if (mode === 'cancel') {
       if (!formData.reason.trim()) newErrors.reason = 'Reason is required';
     }
@@ -38,24 +37,15 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
     e.preventDefault();
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    
-    try {
-      if (mode === 'confirm') {
-        onConfirm({
-          weight: parseFloat(formData.weight),
-          amount: parseFloat(formData.amount)
-        });
-      } else {
-        onCancel(formData.reason);
-      }
-    } catch (error) {
-      console.error('Submission error:', error);
-      setErrors({ general: error.message });
-    } finally {
-      setIsSubmitting(false);
-      onClose();
+    if (mode === 'confirm') {
+      onConfirm({
+        weight: parseFloat(formData.weight),
+        amount: parseFloat(formData.amount),
+      });
+    } else {
+      onCancel(formData.reason.trim());
     }
+    onClose();
   };
 
   const handleChange = (field, value) => {
@@ -64,25 +54,23 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
   };
 
   return (
-    <Modal show={show} onHide={onClose} backdrop="static">
+    <Modal show={show} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          {mode === 'confirm' ? '✅ Confirm Pickup' : '❌ Cancel Pickup'}
+          {mode === 'confirm' ? 'Complete pickup' : 'Cancel pickup'}
         </Modal.Title>
       </Modal.Header>
       
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
-          {errors.general && <Alert variant="danger">{errors.general}</Alert>}
-
           {mode === 'confirm' && (
             <>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" controlId="modal-weight">
                 <Form.Label>Total Weight (kg)</Form.Label>
                 <Form.Control
                   type="number"
                   step="0.1"
-                  placeholder="Enter weight in kilograms"
+                  placeholder="e.g. 7.5" autoFocus
                   value={formData.weight}
                   onChange={(e) => handleChange('weight', e.target.value)}
                   isInvalid={!!errors.weight}
@@ -92,12 +80,12 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" controlId="modal-amount">
                 <Form.Label>Amount Given (LKR)</Form.Label>
                 <Form.Control
                   type="number"
                   step="1"
-                  placeholder="Enter amount in LKR"
+                  placeholder="e.g. 1200"
                   value={formData.amount}
                   onChange={(e) => handleChange('amount', e.target.value)}
                   isInvalid={!!errors.amount}
@@ -110,7 +98,7 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
           )}
 
           {mode === 'cancel' && (
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" controlId="modal-reason">
               <Form.Label>Reason for Cancellation</Form.Label>
               <Form.Control
                 as="textarea"
@@ -128,15 +116,14 @@ const PickupConfirmationModal = ({ show, onConfirm, onCancel, onClose, mode }) =
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>
-            Close
+          <Button variant="light" onClick={onClose}>
+            Back
           </Button>
           <Button 
             variant={mode === 'confirm' ? 'success' : 'danger'}
             type="submit"
-            disabled={isSubmitting}
           >
-            {isSubmitting ? 'Processing...' : mode === 'confirm' ? 'Confirm Pickup' : 'Cancel Pickup'}
+            {mode === 'confirm' ? 'Mark as complete' : 'Cancel pickup'}
           </Button>
         </Modal.Footer>
       </Form>
