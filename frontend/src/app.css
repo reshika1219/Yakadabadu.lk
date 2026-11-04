@@ -311,3 +311,15 @@ a.row-item:hover { background: var(--paper); color: inherit; }
   .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
   .row-item { padding: 0.85rem 1rem; }
 }
+
+/* ---------- Pickup progress ---------- */
+.progress-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.5rem; }
+.progress-track__step { display: grid; gap: 0.4rem; }
+.progress-track__step span { display: block; height: 6px; border-radius: 999px; background: var(--line); }
+.progress-track__step.is-done span { background: var(--forest); }
+.progress-track__step small { font-weight: 600; color: var(--muted); font-size: 0.78rem; }
+.progress-track__step.is-done small { color: var(--ink); }
+
+.offers { background: var(--paper); border-top: 1px solid var(--line); padding: 0.9rem 1.25rem; display: grid; gap: 0.6rem; }
+.offer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; background: var(--surface); border: 1.5px solid var(--line); border-radius: 14px; padding: 0.7rem 0.9rem; }
+.row-item .listing__img { width: 72px; aspect-ratio: 1; border-radius: 14px; overflow: hidden; font-size: 1.5rem; flex-shrink: 0; }
