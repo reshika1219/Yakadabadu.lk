@@ -49,7 +49,6 @@ By default (`MONGODB_URI=memory`) the API starts an embedded MongoDB and keeps i
 | | `PORT` | API port (default `5001`) |
 | `frontend/.env` | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 | | `VITE_DEMO_LOGIN` | Set to `false` to hide the quick-login buttons |
-| | `VITE_API_URL` | API base URL (default `http://localhost:5001/api`) |
 
 Port 5001 is used because macOS AirPlay occupies 5000.
 
